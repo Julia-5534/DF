@@ -6,6 +6,7 @@ import sys
 import math
 
 FPS = 60
+stage = 1
 
 # Window dimensions
 WIN_WIDTH = 650
@@ -21,9 +22,11 @@ STAT_FONT = pygame.font.SysFont("comicsans", 50)
 BIRD_IMGS = [pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "dfhalf.png"))),
              pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "dfhalf.png"))),
              pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "dfhalf.png")))]
-PIPE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "pipe.png")))
+PIPE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", f"pipeBottom_stage{stage}.png")))
+PIPE_BOTTOM = PIPE_IMG
+#PIPE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "pipe.png")))
 BASE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "base.png")))
-BG_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "bg.png")))
+BG_IMG = pygame.image.load(os.path.join("imgs", f"bg_stage{stage}.png")).convert()
 FART_IMGS = [pygame.image.load(os.path.join("imgs", "PinkCloudS.png")),
              pygame.image.load(os.path.join("imgs", "PinkCloudS.png")),
              pygame.image.load(os.path.join("imgs", "PinkCloudS.png"))]
@@ -173,18 +176,18 @@ class Fart:
 
 class Pipe:
     #values below are to change obstacle 
-    GAP = 300
+    GAP = 500
     VEL = 5.5
 
-    def __init__(self, x):
+    def __init__(self, x, stage):
         self.x = x
         self.height = 0
         # alter gap between obstacles
-        self.gap = 300
+        self.gap = 500
         self.top = 0
         self.bottom = 0
-        self.PIPE_TOP = pygame.transform.flip(PIPE_IMG, False, True)
         self.PIPE_BOTTOM = PIPE_IMG
+        self.PIPE_TOP = pygame.transform.flip(self.PIPE_BOTTOM, False, True)
         self.passed = False
         self.set_height()
 
@@ -242,10 +245,12 @@ class Base:
 
 class Background:
     VEL = 1
-    WIDTH = BG_IMG.get_width()
-    IMG = BG_IMG
 
-    def __init__(self):
+    def __init__(self, stage):
+        self.stage = stage
+        self.BG_IMG = pygame.image.load(os.path.join("imgs", f"bg_stage{stage}.png")).convert()
+        self.WIDTH = self.BG_IMG.get_width()
+        self.HEIGHT = self.BG_IMG.get_height()
         self.x1 = 0
         self.x2 = self.WIDTH
 
@@ -260,8 +265,8 @@ class Background:
             self.x2 = self.x1 + self.WIDTH
 
     def draw(self, win):
-        win.blit(self.IMG, (self.x1, 0))
-        win.blit(self.IMG, (self.x2, 0))
+        win.blit(self.BG_IMG, (self.x1, 0))
+        win.blit(self.BG_IMG, (self.x2, 0))
 
 def draw_window(win, birds, pipes, base, background, score, gen, pipe_ind):
     """
@@ -304,6 +309,15 @@ def draw_window(win, birds, pipes, base, background, score, gen, pipe_ind):
 
     pygame.display.update()
 
+def get_current_stage(score):
+    if score < 10:
+        return 1
+    elif score < 20:
+        return 2
+    # Add more stages as needed
+    else:
+        return 3
+
 def eval_genomes(genomes, config):
     """
     runs the simulation of the current population of
@@ -328,11 +342,15 @@ def eval_genomes(genomes, config):
         ge.append(genome)
 
     base = Base(FLOOR)
-    pipes = [Pipe(700)]
-    score = 0
-    background = Background()  # Create the background object
 
-	# 1. farts - Create a clock object before the game loop begins
+    stage = get_current_stage(score)
+    background = Background(stage)
+    pipes = [Pipe(WIN_WIDTH, stage)]
+    #pipes = [Pipe(700)]
+    score = 0
+    #background = Background()  # Create the background object
+
+	# Create a clock object before the game loop begins
     clock = pygame.time.Clock()
 
     run = True
@@ -392,7 +410,13 @@ def eval_genomes(genomes, config):
             # can add this line to give more reward for passing through a pipe (not required)
             for genome in ge:
                 genome.fitness += 5
-            pipes.append(Pipe(WIN_WIDTH))
+
+            new_stage = get_current_stage(score)
+            if new_stage != stage:
+                stage = new_stage
+                background = Background(stage)
+
+            pipes.append(Pipe(WIN_WIDTH, stage))
 
         for r in rem:
             pipes.remove(r)
@@ -477,11 +501,13 @@ def start_menu():
 def manual_play():
     bird = Bird(230, 350)
     base = Base(FLOOR)
-    pipes = [Pipe(700)]
-    background = Background()
+    clock = pygame.time.Clock()
     win = WIN
     score = 0
-    clock = pygame.time.Clock()
+
+    stage = get_current_stage(score)
+    background = Background(stage)
+    pipes = [Pipe(WIN_WIDTH, stage)]
 
     running = True
     while running:
@@ -516,7 +542,12 @@ def manual_play():
 
         if add_pipe:
             score += 1
-            pipes.append(Pipe(WIN_WIDTH))
+            pipes.append(Pipe(WIN_WIDTH, stage))
+
+            new_stage = get_current_stage(score)
+            if new_stage != stage:
+                stage = new_stage
+                background = Background(stage)
 
         for r in rem:
             pipes.remove(r)
