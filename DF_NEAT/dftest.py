@@ -3,6 +3,9 @@ import neat
 import os
 import random
 import sys
+import math
+
+FPS = 60
 
 # Window dimensions
 WIN_WIDTH = 650
@@ -21,6 +24,10 @@ BIRD_IMGS = [pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "df
 PIPE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "pipe.png")))
 BASE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "base.png")))
 BG_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "bg.png")))
+FART_IMGS = [pygame.image.load(os.path.join("imgs", "PinkCloudS.png")),
+             pygame.image.load(os.path.join("imgs", "PinkCloudS.png")),
+             pygame.image.load(os.path.join("imgs", "PinkCloudS.png"))]
+
 
 gen = 0  # Initialize the generation counter
 DRAW_LINES = True
@@ -35,11 +42,15 @@ class Bird:
         self.x = x
         self.y = y
         self.tilt = 0
+        self.angle = 0
         self.tick_count = 0
         self.vel = 0
         self.height = self.y
         self.img_count = 0
         self.img = self.IMGS[0]
+        self.fart_count = 0  # farts - Initialize the fart counter
+        self.fart_imgs = FART_IMGS  # farts - Set the fart images
+        self.active_farts = []  # farts - Initialize the list of active farts
 
     def jump(self):
         self.vel = -10.5
@@ -93,6 +104,72 @@ class Bird:
 
     def get_mask(self):
         return pygame.mask.from_surface(self.img)
+
+    def fart(self):
+        #change angle of fart
+        self.active_farts.append(Fart(self.x - 20, self.y + 20, 35))
+
+    def draw_farts(self, win):
+        # update list of active farts
+        for fart in self.active_farts:
+            if fart.is_faded():
+                self.active_farts.remove(fart)  # remove fart if it has completely faded away
+
+        # draw remaining active farts
+        for fart in self.active_farts:
+            fart.draw(win)  # pass bird's position to fart's draw method
+
+class Fart:
+    def __init__(self, bird_x, bird_y, angle):
+        self.x = bird_x - 0 * math.cos(math.radians(angle)) # move fart closer death
+        self.y = bird_y + 20 - 60 * math.sin(math.radians(angle))
+        self.imgs = FART_IMGS
+        self.img_count = 0
+        self.img = self.imgs[0]
+        self.timer = 0  # initialize timer to 0
+        self.fade_time = 1.0  # set fade time to 1 second
+        self.opacity = 1.0  # initialize opacity to 100%
+        self.angle = angle
+
+        # calculate horizontal and vertical components of velocity based on angle and launch speed
+        launch_speed = 10.0
+        angle_rad = math.radians(angle)
+        self.vx = launch_speed * math.cos(angle_rad)
+        self.vy = -launch_speed * math.sin(angle_rad)
+
+    def draw(self, win):
+        # calculate time since last frame
+        dt = 1 / FPS
+
+        # update position based on velocity
+        self.x += self.vx * dt
+        self.y += self.vy * dt
+
+        # update opacity based on time elapsed
+        self.opacity -= dt / self.fade_time
+        if self.opacity < 0:
+            self.opacity = 0
+
+        # set image alpha and draw on window
+        alpha = int(255 * self.opacity)
+        rotated_img = pygame.transform.rotate(self.img, self.angle)
+        rotated_img.set_alpha(alpha)
+        win.blit(rotated_img, (self.x, self.y))
+
+        # cycle through fart images
+        self.img_count += 1
+        if self.img_count < 5:
+            self.img = self.imgs[0]
+        elif self.img_count < 10:
+            self.img = self.imgs[1]
+        elif self.img_count < 15:
+            self.img = self.imgs[2]
+        else:
+            self.img_count = 0
+
+    def is_faded(self):
+        # check if fart has completely faded away
+        return self.opacity <= 0
 
 class Pipe:
     #values below are to change obstacle 
@@ -214,6 +291,7 @@ def draw_window(win, birds, pipes, base, background, score, gen, pipe_ind):
             except:
                 pass
         bird.draw(win)
+        bird.draw_farts(win)
 
     score_label = STAT_FONT.render("Score: " + str(score),1,(255,255,255))
     win.blit(score_label, (WIN_WIDTH - score_label.get_width() - 15, 10))
@@ -259,8 +337,7 @@ def eval_genomes(genomes, config):
 
     run = True
     while run and len(birds) > 0:
-		# 2. farts - Calculate the time since the last frame update (delta_time)
-        clock.tick(30)
+        clock.tick(FPS) # set fps
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -334,7 +411,7 @@ def eval_genomes(genomes, config):
             break'''
 
 
-def run(config_file):
+def run_game(config_file):
     """
     runs the NEAT algorithm to train a neural network to play flappy bird.
     :param config_file: location of config file
@@ -360,10 +437,99 @@ def run(config_file):
     print('\nBest genome:\n{!s}'.format(winner))
 
 
+
+def start_menu():
+    menu_image = pygame.image.load(os.path.join("imgs", "DFmenuscreen.png"))    
+    screen_width, screen_height = WIN.get_size()
+    image_width, image_height = menu_image.get_size()
+    x = (screen_width - image_width) // 2
+    y = (screen_height - image_height) // 2
+
+    run = True
+    while run:
+        WIN.blit(menu_image, (x, y))
+
+        button_font = pygame.font.SysFont("comicsans", 40)
+        manual_button = button_font.render("Play Manually", 1, (0, 0, 0))
+        ai_button = button_font.render("Watch AI", 1, (0, 0, 0))
+        WIN.blit(manual_button, (WIN_WIDTH // 2 - manual_button.get_width() // 2, 350))
+        WIN.blit(ai_button, (WIN_WIDTH // 2 - ai_button.get_width() // 2, 450))
+
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+                pygame.quit()
+                sys.exit()
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+                if (WIN_WIDTH // 2 - manual_button.get_width() // 2 <= mouse_x <= WIN_WIDTH // 2 + manual_button.get_width() // 2) and (350 <= mouse_y <= 390):
+                    run = False
+                    manual_play()
+                elif (WIN_WIDTH // 2 - ai_button.get_width() // 2 <= mouse_x <= WIN_WIDTH // 2 + ai_button.get_width() // 2) and (450 <= mouse_y <= 490):
+                    run = False
+                    local_dir = os.path.dirname(__file__)
+                    config_path = os.path.join(local_dir, 'config-feedforward.txt')
+                    run_game(config_path)
+
+def manual_play():
+    bird = Bird(230, 350)
+    base = Base(FLOOR)
+    pipes = [Pipe(700)]
+    background = Background()
+    win = WIN
+    score = 0
+    clock = pygame.time.Clock()
+
+    running = True
+    while running:
+        clock.tick(30)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                        bird.jump()
+                        bird.fart()
+
+        bird.move()
+        base.move()
+        background.move()
+
+        rem = []
+        add_pipe = False
+        for pipe in pipes:
+            pipe.move()
+            if pipe.collide(bird):
+                running = False
+
+            if pipe.x + pipe.PIPE_TOP.get_width() < 0:
+                rem.append(pipe)
+
+            if not pipe.passed and pipe.x < bird.x:
+                pipe.passed = True
+                add_pipe = True
+
+        if add_pipe:
+            score += 1
+            pipes.append(Pipe(WIN_WIDTH))
+
+        for r in rem:
+            pipes.remove(r)
+
+        if bird.y + bird.img.get_height() - 10 >= FLOOR or bird.y < -50:
+            running = False
+
+        draw_window(win, [bird], pipes, base, background, score, 0, 0)
+
+    print("Game Over!")
+
 if __name__ == '__main__':
     # Determine path to configuration file. This path manipulation is
     # here so that the script will run successfully regardless of the
     # current working directory.
-    local_dir = os.path.dirname(__file__)
-    config_path = os.path.join(local_dir, 'config-feedforward.txt')
-    run(config_path)
+    start_menu()
