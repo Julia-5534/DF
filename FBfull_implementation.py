@@ -14,9 +14,9 @@ elevation = window_height * 0.8
 game_images = {}
 framepersecond = 32
 pipeimage = 'images/pipe.png' #Change to spikes/stalagmites/tites?
-background_image = 'images/background.jpg' #Change to some kind of hellscape?
-birdplayer_image = 'images/bird.png' #Change to Grim Reaper riding a scythe
-sealevel_image = 'images/base.jfif' #Not sure if we need this. If so, change to a hellscape foreground
+background_image = 'images/fpbg.png' #Change to some kind of hellscape?
+birdplayer_image = 'images/bird1.png' #Change to Grim Reaper riding a scythe
+sealevel_image = 'images/fpbase.png' #Not sure if we need this. If so, change to a hellscape foreground
 
 
 def flappygame():

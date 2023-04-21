@@ -3,6 +3,7 @@ import random
 import sys
 import pygame
 from pygame.locals import *
+import os
 
 # All the Game Variables
 window_width = 600
@@ -13,11 +14,28 @@ window = pygame.display.set_mode((window_width, window_height))
 elevation = window_height * 0.8
 game_images = {}
 framepersecond = 32
-spikeimage = 'images/spike.png'
-background_image = 'images/background.jpg'
-dfplayer_image = 'images/df.png'
-foreground_image = 'images/foreground.jfif'
 
+# Image paths
+script_folder = os.path.dirname(os.path.realpath(__file__))
+image_folder = os.path.join(script_folder, "images")
+spike_image = os.path.join(image_folder, 'spike.png')  # Spike obstacles in the game
+background_image = os.path.join(image_folder, 'background.png')  # Background image for the game
+dfplayer_image = os.path.join(image_folder, 'df.png')  # Death Farter character image
+foreground_image = os.path.join(image_folder, 'foreground.png')  # Foreground image for the game
+
+# Score images for displaying the score
+score_images = [
+    os.path.join(image_folder, '0.png'),
+    os.path.join(image_folder, '1.png'),
+    os.path.join(image_folder, '2.png'),
+    os.path.join(image_folder, '3.png'),
+    os.path.join(image_folder, '4.png'),
+    os.path.join(image_folder, '5.png'),
+    os.path.join(image_folder, '6.png'),
+    os.path.join(image_folder, '7.png'),
+    os.path.join(image_folder, '8.png'),
+    os.path.join(image_folder, '9.png')
+]
 
 def dfgame():
     """Death Farts Game"""
@@ -150,20 +168,20 @@ def isGameOver(horizontal, vertical, up_spikes, down_spikes):
 
 
 def createSpike():
-    offset = window_height/3
+    offset = window_height / 3
     spikeHeight = game_images['spikeimage'][0].get_height()
     y2 = offset + \
-		random.randrange(
-			0, int(window_height - game_images['foreground'].get_height() - 1.2 * offset))
+        random.randrange(
+            0, int(window_height - game_images['foreground'].get_height() - 1.2 * offset))
     SpikeX = window_width + 10
     y1 = spikeHeight - y2 + offset
     spike = [
-		# upper Spike
-		{'x': SpikeX, 'y': -y1},
+        # upper Spike
+        {'x': SpikeX, 'y': -y1},
 
-		# lower Spike
-		{'x': SpikeX, 'y': y2}
-	]
+        # lower Spike
+        {'x': SpikeX, 'y': y2}
+    ]
     return spike
 
 
@@ -198,9 +216,11 @@ if __name__ == "__main__":
 		foreground_image).convert_alpha()
 	game_images['background'] = pygame.image.load(
 		background_image).convert_alpha()
-	game_images['spikeimage'] = (pygame.transform.rotate(pygame.image.load(
-		spikeimage).convert_alpha(), 180), pygame.image.load(
-        spikeimage).convert_alpha())
+	game_images['spikeimage'] = (
+		pygame.transform.rotate(pygame.image.load(spike_image).convert_alpha(), 180),
+		pygame.image.load(spike_image).convert_alpha()
+	)
+
 
 	print("WELCOME TO DEATH FARTS")
 	print("Press space or enter to start the game")
