@@ -1,12 +1,9 @@
-[![Run on Repl.it](https://repl.it/badge/github/techwithtim/NEAT-Flappy-Bird)](https://repl.it/github/techwithtim/NEAT-Flappy-Bird)
-# NEAT-Flappy-Bird
-An AI that plays flappy bird! Using the NEAT python module.
-
-# Instructions
-Simply run *flappy_bird.py* and watch an AI start training itself to play the game of flappy bird!
-
-# Video Tutorial
-
-You can view on the details of this project here: https://www.youtube.com/watch?v=OGHA-elMrxI
-
-
+Death Farts
+An Utter MasterpieceTM By
+Julia Bullard <github.com/Julia-5534>
+Mason Counts <github.com/spindouken>
+This Utter MasterpieceTM is a loving homage to the late Flappy Bird mobile app game.
+But what if instead of Flappy Bird, we played as DEATH RIDING A SCYTHE?!
+And what if instead of wings flapping, it was in fact Death's flatulence propelling you forward?!
+AND WHAT IF Death travelled from a Graveyard, through the River Styx, and into the fiery depths of Hell?!
+WONDER NO MORE! Death Farts is here to quell all those curiosities!
