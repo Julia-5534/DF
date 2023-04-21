@@ -5,19 +5,19 @@ import random
 import sys
 
 # Window dimensions
-WIN_WIDTH = 500
-WIN_HEIGHT = 800
+WIN_WIDTH = 650
+WIN_HEIGHT = 1150
 WIN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
-FLOOR = 730
+FLOOR = 1000
 
 pygame.font.init()
 STAT_FONT = pygame.font.SysFont("comicsans", 50)
 
 
 # Load images
-BIRD_IMGS = [pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "bird1.png"))),
-             pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "bird2.png"))),
-             pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "bird3.png")))]
+BIRD_IMGS = [pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "dfhalf.png"))),
+             pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "dfhalf.png"))),
+             pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "dfhalf.png")))]
 PIPE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "pipe.png")))
 BASE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "base.png")))
 BG_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "bg.png")))
@@ -96,14 +96,14 @@ class Bird:
 
 class Pipe:
     #values below are to change obstacle 
-    GAP = 200
+    GAP = 300
     VEL = 5.5
 
     def __init__(self, x):
         self.x = x
         self.height = 0
         # alter gap between obstacles
-        self.gap = 200
+        self.gap = 300
         self.top = 0
         self.bottom = 0
         self.PIPE_TOP = pygame.transform.flip(PIPE_IMG, False, True)
