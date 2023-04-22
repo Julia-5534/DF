@@ -221,7 +221,7 @@ class Pipe:
         return False
 
 class Base:
-    VEL = 5
+    VEL = 5.65
     WIDTH = BASE_IMG.get_width()
     IMG = BASE_IMG
 
@@ -246,7 +246,7 @@ class Base:
         win.blit(self.IMG, (self.x2, self.y))
 
 class Background:
-    VEL = 1
+    VEL = .5
 
     def __init__(self, stage):
         self.stage = stage
@@ -473,11 +473,11 @@ def start_menu():
     while run:
         WIN.blit(menu_image, (x, y))
 
-        button_font = pygame.font.SysFont("comicsans", 40)
-        manual_button = button_font.render("Play Manually", 1, (0, 0, 0))
-        ai_button = button_font.render("Watch AI", 1, (0, 0, 0))
-        WIN.blit(manual_button, (WIN_WIDTH // 2 - manual_button.get_width() // 2, 350))
-        WIN.blit(ai_button, (WIN_WIDTH // 2 - ai_button.get_width() // 2, 450))
+        button_font = pygame.font.Font("Gypsy Curse.ttf", 100)
+        manual_button = button_font.render("Play Manually", 1, (255, 255, 0))
+        ai_button = button_font.render("Watch  A.I.", 1, (255, 255, 0))
+        WIN.blit(manual_button, (WIN_WIDTH // 2 - manual_button.get_width() // 2, 837))
+        WIN.blit(ai_button, (WIN_WIDTH // 2 - ai_button.get_width() // 2, 974)) # noice
 
         pygame.display.update()
 
@@ -489,10 +489,10 @@ def start_menu():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
-                if (WIN_WIDTH // 2 - manual_button.get_width() // 2 <= mouse_x <= WIN_WIDTH // 2 + manual_button.get_width() // 2) and (350 <= mouse_y <= 390):
+                if (WIN_WIDTH // 2 - manual_button.get_width() // 2 <= mouse_x <= WIN_WIDTH // 2 + manual_button.get_width() // 2) and (870 <= mouse_y <= 950):
                     run = False
                     manual_play()
-                elif (WIN_WIDTH // 2 - ai_button.get_width() // 2 <= mouse_x <= WIN_WIDTH // 2 + ai_button.get_width() // 2) and (450 <= mouse_y <= 490):
+                elif (WIN_WIDTH // 2 - ai_button.get_width() // 2 <= mouse_x <= WIN_WIDTH // 2 + ai_button.get_width() // 2) and (1000 <= mouse_y <= 1080):
                     run = False
                     local_dir = os.path.dirname(__file__)
                     config_path = os.path.join(local_dir, 'config-feedforward.txt')
@@ -522,6 +522,9 @@ def manual_play():
                 if event.key == pygame.K_SPACE:
                         bird.jump()
                         bird.fart()
+                elif event.key == pygame.K_ESCAPE:
+                    running = False
+                    game_over_screen()
 
         bird.move()
         base.move()
@@ -532,7 +535,7 @@ def manual_play():
         for pipe in pipes:
             pipe.move()
             if pipe.collide(bird):
-                running = False
+                game_over_screen(score)
 
             if pipe.x + pipe.PIPE_TOP.get_width() < 0:
                 rem.append(pipe)
