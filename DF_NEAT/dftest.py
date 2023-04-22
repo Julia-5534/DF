@@ -25,7 +25,7 @@ BIRD_IMGS = [pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "df
 PIPE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", f"pipeBottom_stage{stage}.png")))
 PIPE_BOTTOM = PIPE_IMG
 #PIPE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "pipe.png")))
-BASE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "base.png")))
+BASE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", f"fground_stage{stage}.png")).convert())
 BG_IMG = pygame.image.load(os.path.join("imgs", f"bg_stage{stage}.png")).convert()
 FART_IMGS = [pygame.image.load(os.path.join("imgs", "cloud_1.png")),
              pygame.image.load(os.path.join("imgs", "PinkCloudS.png")),
@@ -176,14 +176,14 @@ class Fart:
 
 class Pipe:
     #values below are to change obstacle 
-    GAP = 500
+    GAP = 300
     VEL = 5.5
 
     def __init__(self, x, stage):
         self.x = x
         self.height = 0
         # alter gap between obstacles
-        self.gap = 500
+        self.gap = 300
         self.top = 0
         self.bottom = 0
         self.PIPE_BOTTOM = pygame.image.load(os.path.join("imgs", f"pipeBottom_stage{stage}.png")).convert_alpha()
@@ -225,10 +225,11 @@ class Base:
     WIDTH = BASE_IMG.get_width()
     IMG = BASE_IMG
 
-    def __init__(self, y):
+    def __init__(self, y, stage):
         self.y = y
         self.x1 = 0
         self.x2 = self.WIDTH
+        self.IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", f"fground_stage{stage}.png")).convert())
 
     def move(self):
         self.x1 -= self.VEL
@@ -318,7 +319,7 @@ def get_current_stage(score):
     elif score < 30:
         return 3
     else:
-        return 4
+        return 3
 
 def eval_genomes(genomes, config):
     """
@@ -343,9 +344,9 @@ def eval_genomes(genomes, config):
         birds.append(Bird(230,350))
         ge.append(genome)
 
-    base = Base(FLOOR)
     score = 0
     stage = get_current_stage(score)
+    base = Base(FLOOR, stage)
     background = Background(stage)
     pipes = [Pipe(WIN_WIDTH, stage)]
 
@@ -354,7 +355,7 @@ def eval_genomes(genomes, config):
 
     run = True
     while run and len(birds) > 0:
-        clock.tick(FPS) # set fps
+        clock.tick(60) # set fps
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -462,7 +463,7 @@ def run_game(config_file):
 
 
 def start_menu():
-    menu_image = pygame.image.load(os.path.join("imgs", "DFmenuscreen.png"))    
+    menu_image = pygame.image.load(os.path.join("imgs", "DFMenuFinal.png"))    
     screen_width, screen_height = WIN.get_size()
     image_width, image_height = menu_image.get_size()
     x = (screen_width - image_width) // 2
@@ -499,18 +500,19 @@ def start_menu():
 
 def manual_play():
     bird = Bird(230, 350)
-    base = Base(FLOOR)
-    clock = pygame.time.Clock()
-    win = WIN
     score = 0
 
     stage = get_current_stage(score)
+    base = Base(FLOOR, stage)
     background = Background(stage)
     pipes = [Pipe(WIN_WIDTH, stage)]
 
+    clock = pygame.time.Clock()
+    win = WIN
+
     running = True
     while running:
-        clock.tick(30)
+        clock.tick(60)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
