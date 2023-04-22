@@ -363,6 +363,9 @@ def eval_genomes(genomes, config):
                 pygame.quit()
                 quit()
                 break
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                start_menu()
+                break
 
         pipe_ind = 0
         if len(birds) > 0:
@@ -524,7 +527,7 @@ def manual_play():
                         bird.fart()
                 elif event.key == pygame.K_ESCAPE:
                     running = False
-                    game_over_screen()
+                    game_over_screen(score)
 
         bird.move()
         base.move()
