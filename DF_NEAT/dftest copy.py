@@ -15,7 +15,7 @@ WIN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
 FLOOR = 1000
 
 pygame.font.init()
-STAT_FONT = pygame.font.Font("Gypsy Curse.ttf", 50)
+STAT_FONT = pygame.font.SysFont("comicsans", 50)
 
 
 # Load images
@@ -25,9 +25,9 @@ BIRD_IMGS = [pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "df
 PIPE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", f"pipeBottom_stage{stage}.png")))
 PIPE_BOTTOM = PIPE_IMG
 #PIPE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "pipe.png")))
-BASE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", f"fground_stage{stage}.png")).convert())
+BASE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "base.png")))
 BG_IMG = pygame.image.load(os.path.join("imgs", f"bg_stage{stage}.png")).convert()
-FART_IMGS = [pygame.image.load(os.path.join("imgs", "cloud_1.png")),
+FART_IMGS = [pygame.image.load(os.path.join("imgs", "PinkCloudS.png")),
              pygame.image.load(os.path.join("imgs", "PinkCloudS.png")),
              pygame.image.load(os.path.join("imgs", "PinkCloudS.png"))]
 
@@ -38,7 +38,7 @@ DRAW_LINES = True
 class Bird:
     IMGS = BIRD_IMGS
     MAX_ROTATION = 25
-    ROT_VEL = 5
+    ROT_VEL = 20
     ANIMATION_TIME = 5
 
     def __init__(self, x, y):
@@ -176,21 +176,20 @@ class Fart:
 
 class Pipe:
     #values below are to change obstacle 
-    GAP = 315
-    VEL = 5.65
+    GAP = 500
+    VEL = 5.5
 
     def __init__(self, x, stage):
         self.x = x
         self.height = 0
         # alter gap between obstacles
-        self.gap = 315
+        self.gap = 500
         self.top = 0
         self.bottom = 0
-        self.PIPE_BOTTOM = pygame.image.load(os.path.join("imgs", f"pipeBottom_stage{stage}.png")).convert_alpha()
+        self.PIPE_BOTTOM = PIPE_IMG
         self.PIPE_TOP = pygame.transform.flip(self.PIPE_BOTTOM, False, True)
         self.passed = False
         self.set_height()
-        self.stage = stage
 
     def set_height(self):
         self.height = random.randrange(50, 450)
@@ -221,15 +220,14 @@ class Pipe:
         return False
 
 class Base:
-    VEL = 5.65
+    VEL = 5
     WIDTH = BASE_IMG.get_width()
     IMG = BASE_IMG
 
-    def __init__(self, y, stage):
+    def __init__(self, y):
         self.y = y
         self.x1 = 0
         self.x2 = self.WIDTH
-        self.IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", f"fground_stage{stage}.png")).convert())
 
     def move(self):
         self.x1 -= self.VEL
@@ -246,7 +244,7 @@ class Base:
         win.blit(self.IMG, (self.x2, self.y))
 
 class Background:
-    VEL = .5
+    VEL = 1
 
     def __init__(self, stage):
         self.stage = stage
@@ -270,7 +268,7 @@ class Background:
         win.blit(self.BG_IMG, (self.x1, 0))
         win.blit(self.BG_IMG, (self.x2, 0))
 
-def draw_window(win, birds, pipes, base, background, score, gen, pipe_ind, draw_lines=True):
+def draw_window(win, birds, pipes, base, background, score, gen, pipe_ind):
     """
     draws the windows for the main game loop
     :param win: pygame window surface
@@ -291,14 +289,14 @@ def draw_window(win, birds, pipes, base, background, score, gen, pipe_ind, draw_
 
     base.draw(win)
     for bird in birds:
-        bird.draw(win)
-        bird.draw_farts(win)
-        if draw_lines:
+        if DRAW_LINES:
             try:
                 pygame.draw.line(win, (255,0,0), (bird.x+bird.img.get_width()/2, bird.y + bird.img.get_height()/2), (pipes[pipe_ind].x + pipes[pipe_ind].PIPE_TOP.get_width()/2, pipes[pipe_ind].height), 5)
                 pygame.draw.line(win, (255,0,0), (bird.x+bird.img.get_width()/2, bird.y + bird.img.get_height()/2), (pipes[pipe_ind].x + pipes[pipe_ind].PIPE_BOTTOM.get_width()/2, pipes[pipe_ind].bottom), 5)
             except:
                 pass
+        bird.draw(win)
+        bird.draw_farts(win)
 
     score_label = STAT_FONT.render("Score: " + str(score),1,(255,255,255))
     win.blit(score_label, (WIN_WIDTH - score_label.get_width() - 15, 10))
@@ -316,8 +314,7 @@ def get_current_stage(score):
         return 1
     elif score < 20:
         return 2
-    elif score < 30:
-        return 3
+    # Add more stages as needed
     else:
         return 3
 
@@ -344,18 +341,21 @@ def eval_genomes(genomes, config):
         birds.append(Bird(230,350))
         ge.append(genome)
 
-    score = 0
+    base = Base(FLOOR)
+
     stage = get_current_stage(score)
-    base = Base(FLOOR, stage)
     background = Background(stage)
     pipes = [Pipe(WIN_WIDTH, stage)]
+    #pipes = [Pipe(700)]
+    score = 0
+    #background = Background()  # Create the background object
 
 	# Create a clock object before the game loop begins
     clock = pygame.time.Clock()
 
     run = True
     while run and len(birds) > 0:
-        clock.tick(60) # set fps
+        clock.tick(FPS) # set fps
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -463,7 +463,7 @@ def run_game(config_file):
 
 
 def start_menu():
-    menu_image = pygame.image.load(os.path.join("imgs", "DFMenuFinal.png"))    
+    menu_image = pygame.image.load(os.path.join("imgs", "DFmenuscreen.png"))    
     screen_width, screen_height = WIN.get_size()
     image_width, image_height = menu_image.get_size()
     x = (screen_width - image_width) // 2
@@ -473,11 +473,11 @@ def start_menu():
     while run:
         WIN.blit(menu_image, (x, y))
 
-        button_font = pygame.font.Font("Gypsy Curse.ttf", 100)
-        manual_button = button_font.render("Play Manually", 1, (255, 255, 0))
-        ai_button = button_font.render("Watch  A.I.", 1, (255, 255, 0))
-        WIN.blit(manual_button, (WIN_WIDTH // 2 - manual_button.get_width() // 2, 837))
-        WIN.blit(ai_button, (WIN_WIDTH // 2 - ai_button.get_width() // 2, 974)) # noice
+        button_font = pygame.font.SysFont("comicsans", 40)
+        manual_button = button_font.render("Play Manually", 1, (0, 0, 0))
+        ai_button = button_font.render("Watch AI", 1, (0, 0, 0))
+        WIN.blit(manual_button, (WIN_WIDTH // 2 - manual_button.get_width() // 2, 350))
+        WIN.blit(ai_button, (WIN_WIDTH // 2 - ai_button.get_width() // 2, 450))
 
         pygame.display.update()
 
@@ -489,10 +489,10 @@ def start_menu():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
-                if (WIN_WIDTH // 2 - manual_button.get_width() // 2 <= mouse_x <= WIN_WIDTH // 2 + manual_button.get_width() // 2) and (870 <= mouse_y <= 950):
+                if (WIN_WIDTH // 2 - manual_button.get_width() // 2 <= mouse_x <= WIN_WIDTH // 2 + manual_button.get_width() // 2) and (350 <= mouse_y <= 390):
                     run = False
                     manual_play()
-                elif (WIN_WIDTH // 2 - ai_button.get_width() // 2 <= mouse_x <= WIN_WIDTH // 2 + ai_button.get_width() // 2) and (1000 <= mouse_y <= 1080):
+                elif (WIN_WIDTH // 2 - ai_button.get_width() // 2 <= mouse_x <= WIN_WIDTH // 2 + ai_button.get_width() // 2) and (450 <= mouse_y <= 490):
                     run = False
                     local_dir = os.path.dirname(__file__)
                     config_path = os.path.join(local_dir, 'config-feedforward.txt')
@@ -500,19 +500,18 @@ def start_menu():
 
 def manual_play():
     bird = Bird(230, 350)
+    base = Base(FLOOR)
+    clock = pygame.time.Clock()
+    win = WIN
     score = 0
 
     stage = get_current_stage(score)
-    base = Base(FLOOR, stage)
     background = Background(stage)
     pipes = [Pipe(WIN_WIDTH, stage)]
 
-    clock = pygame.time.Clock()
-    win = WIN
-
     running = True
     while running:
-        clock.tick(60)
+        clock.tick(30)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -522,9 +521,6 @@ def manual_play():
                 if event.key == pygame.K_SPACE:
                         bird.jump()
                         bird.fart()
-                elif event.key == pygame.K_ESCAPE:
-                    running = False
-                    game_over_screen()
 
         bird.move()
         base.move()
@@ -535,7 +531,7 @@ def manual_play():
         for pipe in pipes:
             pipe.move()
             if pipe.collide(bird):
-                game_over_screen(score)
+                running = False
 
             if pipe.x + pipe.PIPE_TOP.get_width() < 0:
                 rem.append(pipe)
@@ -557,31 +553,11 @@ def manual_play():
             pipes.remove(r)
 
         if bird.y + bird.img.get_height() - 10 >= FLOOR or bird.y < -50:
-            game_over_screen(score)
+            running = False
 
-        draw_window(win, [bird], pipes, base, background, score, 0, 0, draw_lines=False)
+        draw_window(win, [bird], pipes, base, background, score, 0, 0)
 
     print("Game Over!")
-
-def game_over_screen(score):
-    """
-    Displays the game over screen and waits for 3 seconds before returning to the start menu
-    :param score: the final score of the game
-    """
-    font = pygame.font.Font("Gypsy Curse.ttf", 120)
-    text = font.render("Game Over", 1, (255, 255, 255))
-    score_text = font.render("Score: " + str(score), 1, (255, 255, 255))
-
-    WIN.fill((0, 0, 0))
-    WIN.blit(text, (WIN_WIDTH / 2 - text.get_width() / 2, WIN_HEIGHT / 2 - text.get_height()))
-    WIN.blit(score_text, (WIN_WIDTH / 2 - score_text.get_width() / 2, WIN_HEIGHT / 2))
-    pygame.display.update()
-
-    # Wait for 3 seconds
-    pygame.time.delay(3000)
-
-    # Return to the start menu
-    start_menu()
 
 if __name__ == '__main__':
     # Determine path to configuration file. This path manipulation is

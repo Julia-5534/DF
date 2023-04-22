@@ -386,6 +386,7 @@ def eval_genomes(genomes, config):
     base = Base(FLOOR)
     pipes = [Pipe(700)]
     score = 0
+    background = Background()  # Create the background object
 
 	# 1. farts - Create a clock object before the game loop begins
     clock = pygame.time.Clock()
@@ -422,6 +423,7 @@ def eval_genomes(genomes, config):
 
 
         base.move()
+        background.move() # Update the scrolling background
 
         rem = []
         add_pipe = False
@@ -458,7 +460,7 @@ def eval_genomes(genomes, config):
                 ge.pop(birds.index(bird))
                 birds.pop(birds.index(bird))
 
-        draw_window(WIN, birds, pipes, base, score, gen, pipe_ind)
+        draw_window(WIN, birds, pipes, base, background, score, gen, pipe_ind)
 
         # break if score gets large enough
         '''if score > 20:
