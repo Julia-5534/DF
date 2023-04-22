@@ -29,7 +29,10 @@ BASE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", f"fgr
 BG_IMG = pygame.image.load(os.path.join("imgs", f"bg_stage{stage}.png")).convert()
 FART_IMGS = [pygame.image.load(os.path.join("imgs", "cloud_1.png")),
              pygame.image.load(os.path.join("imgs", "PinkCloudS.png")),
-             pygame.image.load(os.path.join("imgs", "PinkCloudS.png"))]
+             pygame.image.load(os.path.join("imgs", "cloud_2.png")),
+             pygame.image.load(os.path.join("imgs", "YellowCloudS.png")),
+             pygame.image.load(os.path.join("imgs", "cloud_3.png")),
+             pygame.image.load(os.path.join("imgs", "GreenCloudS.png"))]
 
 
 gen = 0  # Initialize the generation counter
@@ -124,21 +127,30 @@ class Bird:
 
 class Fart:
     def __init__(self, bird_x, bird_y, angle):
-        self.x = bird_x - 0 * math.cos(math.radians(angle)) # move fart closer death
-        self.y = bird_y + 20 - 60 * math.sin(math.radians(angle))
-        self.imgs = FART_IMGS
+        angle_deviation = random.uniform(-20, 20) # add random deviation to initial angle of fart (angle of self.angle)
+        self.angle = angle + angle_deviation
+        # move x axis of fart closer to death (bird_x - value)
+        self.x = bird_x - 0 * math.cos(math.radians(self.angle))
+        # move y axis of fart closer to death (+ value at end)
+        self.y = bird_y + 20 - 60 * math.sin(math.radians(self.angle)) + 70
+        self.imgs = []
+        for img in FART_IMGS:
+            scale = random.uniform(0.6, 1.4)
+            scaled_img = pygame.transform.scale(img, (int(img.get_width() * scale), int(img.get_height() * scale)))
+            self.imgs.append(scaled_img)
         self.img_count = 0
         self.img = self.imgs[0]
         self.timer = 0  # initialize timer to 0
-        self.fade_time = 1.0  # set fade time to 1 second
+        self.fade_time = 2.0  # time for fart to fade out
         self.opacity = 1.0  # initialize opacity to 100%
-        self.angle = angle
 
-        # calculate horizontal and vertical components of velocity based on angle and launch speed
-        launch_speed = 10.0
-        angle_rad = math.radians(angle)
-        self.vx = launch_speed * math.cos(angle_rad)
-        self.vy = -launch_speed * math.sin(angle_rad)
+        # calculate fart launch speed with random factor
+        launch_speed = random.uniform(-10.0, -50.0)
+
+        # calculate horizontal and vertical components of velocity based on angle and launch speed with random components
+        angle_rad = math.radians(self.angle)
+        self.vx = launch_speed * math.cos(angle_rad) + random.uniform(-1, 1)
+        self.vy = -launch_speed * math.sin(angle_rad) + random.uniform(-1, 1)
 
     def draw(self, win):
         # calculate time since last frame
@@ -147,6 +159,10 @@ class Fart:
         # update position based on velocity
         self.x += self.vx * dt
         self.y += self.vy * dt
+
+        # add random drift to velocity
+        self.vx += random.uniform(-20, 0) # second value as 0 means fart will not fly into face ;]
+        self.vy += random.uniform(-40, 40)
 
         # update opacity based on time elapsed
         self.opacity -= dt / self.fade_time
@@ -167,6 +183,10 @@ class Fart:
             self.img = self.imgs[1]
         elif self.img_count < 15:
             self.img = self.imgs[2]
+        elif self.img_count < 20:
+            self.img = self.imgs[3]
+        elif self.img_count < 25:
+            self.img = self.imgs[4]
         else:
             self.img_count = 0
 
@@ -581,7 +601,7 @@ def game_over_screen(score):
     pygame.display.update()
 
     # Wait for 3 seconds
-    pygame.time.delay(3000)
+    pygame.time.delay(1500)
 
     # Return to the start menu
     start_menu()
