@@ -27,7 +27,7 @@ PIPE_BOTTOM = PIPE_IMG
 #PIPE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "pipe.png")))
 BASE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "base.png")))
 BG_IMG = pygame.image.load(os.path.join("imgs", f"bg_stage{stage}.png")).convert()
-FART_IMGS = [pygame.image.load(os.path.join("imgs", "PinkCloudS.png")),
+FART_IMGS = [pygame.image.load(os.path.join("imgs", "cloud_1.png")),
              pygame.image.load(os.path.join("imgs", "PinkCloudS.png")),
              pygame.image.load(os.path.join("imgs", "PinkCloudS.png"))]
 
@@ -186,10 +186,11 @@ class Pipe:
         self.gap = 500
         self.top = 0
         self.bottom = 0
-        self.PIPE_BOTTOM = PIPE_IMG
+        self.PIPE_BOTTOM = pygame.image.load(os.path.join("imgs", f"pipeBottom_stage{stage}.png")).convert_alpha()
         self.PIPE_TOP = pygame.transform.flip(self.PIPE_BOTTOM, False, True)
         self.passed = False
         self.set_height()
+        self.stage = stage
 
     def set_height(self):
         self.height = random.randrange(50, 450)
@@ -314,9 +315,10 @@ def get_current_stage(score):
         return 1
     elif score < 20:
         return 2
-    # Add more stages as needed
-    else:
+    elif score < 30:
         return 3
+    else:
+        return 4
 
 def eval_genomes(genomes, config):
     """
@@ -342,13 +344,10 @@ def eval_genomes(genomes, config):
         ge.append(genome)
 
     base = Base(FLOOR)
-
+    score = 0
     stage = get_current_stage(score)
     background = Background(stage)
     pipes = [Pipe(WIN_WIDTH, stage)]
-    #pipes = [Pipe(700)]
-    score = 0
-    #background = Background()  # Create the background object
 
 	# Create a clock object before the game loop begins
     clock = pygame.time.Clock()
