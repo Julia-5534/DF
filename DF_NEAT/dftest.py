@@ -176,14 +176,14 @@ class Fart:
 
 class Pipe:
     #values below are to change obstacle 
-    GAP = 300
-    VEL = 5.5
+    GAP = 315
+    VEL = 5.65
 
     def __init__(self, x, stage):
         self.x = x
         self.height = 0
         # alter gap between obstacles
-        self.gap = 300
+        self.gap = 315
         self.top = 0
         self.bottom = 0
         self.PIPE_BOTTOM = pygame.image.load(os.path.join("imgs", f"pipeBottom_stage{stage}.png")).convert_alpha()
@@ -270,7 +270,7 @@ class Background:
         win.blit(self.BG_IMG, (self.x1, 0))
         win.blit(self.BG_IMG, (self.x2, 0))
 
-def draw_window(win, birds, pipes, base, background, score, gen, pipe_ind):
+def draw_window(win, birds, pipes, base, background, score, gen, pipe_ind, draw_lines=True):
     """
     draws the windows for the main game loop
     :param win: pygame window surface
@@ -291,14 +291,14 @@ def draw_window(win, birds, pipes, base, background, score, gen, pipe_ind):
 
     base.draw(win)
     for bird in birds:
-        if DRAW_LINES:
+        bird.draw(win)
+        bird.draw_farts(win)
+        if draw_lines:
             try:
                 pygame.draw.line(win, (255,0,0), (bird.x+bird.img.get_width()/2, bird.y + bird.img.get_height()/2), (pipes[pipe_ind].x + pipes[pipe_ind].PIPE_TOP.get_width()/2, pipes[pipe_ind].height), 5)
                 pygame.draw.line(win, (255,0,0), (bird.x+bird.img.get_width()/2, bird.y + bird.img.get_height()/2), (pipes[pipe_ind].x + pipes[pipe_ind].PIPE_BOTTOM.get_width()/2, pipes[pipe_ind].bottom), 5)
             except:
                 pass
-        bird.draw(win)
-        bird.draw_farts(win)
 
     score_label = STAT_FONT.render("Score: " + str(score),1,(255,255,255))
     win.blit(score_label, (WIN_WIDTH - score_label.get_width() - 15, 10))
@@ -554,11 +554,31 @@ def manual_play():
             pipes.remove(r)
 
         if bird.y + bird.img.get_height() - 10 >= FLOOR or bird.y < -50:
-            running = False
+            game_over_screen(score)
 
-        draw_window(win, [bird], pipes, base, background, score, 0, 0)
+        draw_window(win, [bird], pipes, base, background, score, 0, 0, draw_lines=False)
 
     print("Game Over!")
+
+def game_over_screen(score):
+    """
+    Displays the game over screen and waits for 3 seconds before returning to the start menu
+    :param score: the final score of the game
+    """
+    font = pygame.font.SysFont("comicsans", 80)
+    text = font.render("Game Over", 1, (255, 255, 255))
+    score_text = font.render("Score: " + str(score), 1, (255, 255, 255))
+
+    WIN.fill((0, 0, 0))
+    WIN.blit(text, (WIN_WIDTH / 2 - text.get_width() / 2, WIN_HEIGHT / 2 - text.get_height()))
+    WIN.blit(score_text, (WIN_WIDTH / 2 - score_text.get_width() / 2, WIN_HEIGHT / 2))
+    pygame.display.update()
+
+    # Wait for 3 seconds
+    pygame.time.delay(3000)
+
+    # Return to the start menu
+    start_menu()
 
 if __name__ == '__main__':
     # Determine path to configuration file. This path manipulation is
