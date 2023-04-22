@@ -15,7 +15,7 @@ WIN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
 FLOOR = 1000
 
 pygame.font.init()
-STAT_FONT = pygame.font.SysFont("comicsans", 50)
+STAT_FONT = pygame.font.Font("Gypsy Curse.ttf", 50)
 
 
 # Load images
@@ -568,7 +568,7 @@ def game_over_screen(score):
     Displays the game over screen and waits for 3 seconds before returning to the start menu
     :param score: the final score of the game
     """
-    font = pygame.font.SysFont("comicsans", 80)
+    font = pygame.font.Font("Gypsy Curse.ttf", 120)
     text = font.render("Game Over", 1, (255, 255, 255))
     score_text = font.render("Score: " + str(score), 1, (255, 255, 255))
 
