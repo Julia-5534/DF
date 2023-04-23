@@ -535,6 +535,11 @@ def start_menu():
                     run_game(config_path)
                 elif (WIN_WIDTH // 2 - leaderboard_button.get_width() // 2 <= mouse_x <= WIN_WIDTH // 2 + leaderboard_button.get_width() // 2) and (1110 <= mouse_y <= 1190):
                     show_leaderboard()
+                        # Check for the M key press event for manual play
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_TAB:
+                    run = False
+                    manual_play()
 
 def manual_play():
     bird = Bird(230, 350)
@@ -724,15 +729,27 @@ def game_over_screen(score):
                 # Call the handle_event method of the TextInput object to handle the key press
                 text_input.handle_event(event)
 
+                if event.key == pygame.K_TAB:
+                    manual_play()
+
         # Redraw the screen with the updated text input and the "Game Over" text
         WIN.fill((2, 29, 49))
         WIN.blit(enter_name_text, (WIN_WIDTH // 2 - enter_name_text.get_width() // 2, WIN_HEIGHT // 2 - 100))
         text_input.draw(WIN)
         font = pygame.font.Font("Gypsy Curse.ttf", 120)
+        small_font = pygame.font.Font("Gypsy Curse.ttf", 45)
         game_over_text = font.render("Game Over", 1, (255, 255, 0))
         score_text = font.render("Score: " + str(score), 1, (255, 255, 0))
+        play_again = pygame.font.Font("Gypsy Curse.ttf", 100).render("Play Again", 1, (255, 255, 0))
+        press_tab = pygame.font.Font("Open 24 Display St.ttf", 25).render("Press Tab", 1, (255, 255, 0))
+        esc_text = small_font.render("Hit ESC key to return to menu", 1, (255, 255, 255))
+
         WIN.blit(game_over_text, (WIN_WIDTH // 2 - game_over_text.get_width() // 2, WIN_HEIGHT // 2 - game_over_text.get_height() - 340)) # - value to move up from center (y-value)
         WIN.blit(score_text, (WIN_WIDTH // 2 - score_text.get_width() // 2, WIN_HEIGHT // 2 - 340)) # - value to move up from center (y-value)
+        WIN.blit(play_again, (WIN_WIDTH // 2 - play_again.get_width() // 2, WIN_HEIGHT // 2 + 300))
+        WIN.blit(esc_text, (WIN_WIDTH // 2 - esc_text.get_width() // 2, 1020))
+        WIN.blit(press_tab, (WIN_WIDTH // 2 - esc_text.get_width() // 2 + 300, 1000))
+
         pygame.display.update()
 
         # Limit the frame rate to reduce CPU usage
@@ -740,9 +757,6 @@ def game_over_screen(score):
 
         # Wait for 3 seconds
         #pygame.time.delay(1500)
-
-        # Return to the start menu
-        #start_menu()
 
 
 if __name__ == '__main__':
