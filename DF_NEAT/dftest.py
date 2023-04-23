@@ -4,6 +4,8 @@ import os
 import random
 import sys
 import math
+# from pygame_textinput import TextInput
+import requests
 
 FPS = 60
 stage = 1
@@ -41,7 +43,7 @@ DRAW_LINES = True
 class Bird:
     IMGS = BIRD_IMGS
     MAX_ROTATION = 25
-    ROT_VEL = 5
+    ROT_VEL = 2
     ANIMATION_TIME = 5
 
     def __init__(self, x, y):
@@ -59,7 +61,7 @@ class Bird:
         self.active_farts = []  # farts - Initialize the list of active farts
 
     def jump(self):
-        self.vel = -10.5
+        self.vel = -9.5
         self.tick_count = 0
         self.height = self.y
 
@@ -196,14 +198,14 @@ class Fart:
 
 class Pipe:
     #values below are to change obstacle 
-    GAP = 315
-    VEL = 5.65
+    GAP = 370
+    VEL = 5
 
     def __init__(self, x, stage):
         self.x = x
         self.height = 0
         # alter gap between obstacles
-        self.gap = 315
+        self.gap = 370
         self.top = 0
         self.bottom = 0
         self.PIPE_BOTTOM = pygame.image.load(os.path.join("imgs", f"pipeBottom_stage{stage}.png")).convert_alpha()
@@ -499,8 +501,11 @@ def start_menu():
         button_font = pygame.font.Font("Gypsy Curse.ttf", 100)
         manual_button = button_font.render("Play Manually", 1, (255, 255, 0))
         ai_button = button_font.render("Watch  A.I.", 1, (255, 255, 0))
+        leaderboard_button = button_font.render("Leaderboard", 1, (255, 255, 0))
         WIN.blit(manual_button, (WIN_WIDTH // 2 - manual_button.get_width() // 2, 837))
-        WIN.blit(ai_button, (WIN_WIDTH // 2 - ai_button.get_width() // 2, 974)) # noice
+        WIN.blit(ai_button, (WIN_WIDTH // 2 - ai_button.get_width() // 2, 974))
+        WIN.blit(leaderboard_button, (WIN_WIDTH // 2 - leaderboard_button.get_width() // 2, 1110))
+
 
         pygame.display.update()
 
@@ -520,6 +525,8 @@ def start_menu():
                     local_dir = os.path.dirname(__file__)
                     config_path = os.path.join(local_dir, 'config-feedforward.txt')
                     run_game(config_path)
+                elif (WIN_WIDTH // 2 - leaderboard_button.get_width() // 2 <= mouse_x <= WIN_WIDTH // 2 + leaderboard_button.get_width() // 2) and (1110 <= mouse_y <= 1190):
+                    show_leaderboard()
 
 def manual_play():
     bird = Bird(230, 350)
@@ -586,25 +593,149 @@ def manual_play():
 
     print("Game Over!")
 
+class TextInput:
+    def __init__(self, x, y, width, height, font, font_size, color, text=""):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.font = pygame.font.Font(font, font_size)
+        self.color = color
+        self.text = text
+
+    def draw(self, surface):
+        pygame.draw.rect(surface, self.color, (self.x, self.y, self.width, self.height), 1)
+        text_surface = self.font.render(self.text, True, self.color)
+        surface.blit(text_surface, (self.x + 5, self.y + 5))
+
+    def handle_event(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RETURN:
+                return self.text
+            elif event.key == pygame.K_BACKSPACE:
+                self.text = self.text[:-1]
+            else:
+                self.text += event.unicode
+        return None
+
+    def get_text(self):
+        return self.text
+
+def update_leaderboard(name, score):
+    leaderboard_file = "leaderboard.txt"
+    top_scores = []
+
+    with open(leaderboard_file, 'r') as file:
+        lines = file.readlines()
+        for line in lines:
+            entry = line.strip().split(':')
+            if len(entry) == 2:
+                top_scores.append((entry[0], int(entry[1])))
+
+    top_scores.append((name, score))
+    top_scores.sort(key=lambda x: x[1], reverse=True)
+    top_scores = top_scores[:100]
+
+    with open(leaderboard_file, 'w') as file:
+        for name, score in top_scores:
+            file.write(f"{name}:{score}\n")
+
+    return True
+
+def show_leaderboard():
+    leaderboard_file = "leaderboard.txt"
+    leaderboard = []
+
+    with open(leaderboard_file, 'r') as file:
+        lines = file.readlines()
+        for line in lines:
+            entry = line.strip().split(':')
+            if len(entry) >= 2:  # Check if entry has at least two items
+                leaderboard.append((entry[0], int(entry[1])))
+
+    leaderboard_font = pygame.font.Font("Gypsy Curse.ttf", 50)
+    WIN.fill((0, 0, 0))
+
+    for index, entry in enumerate(leaderboard[:10]):  # Show top 10 scores
+        rank_text = leaderboard_font.render(f"{index + 1}.", 1, (255, 255, 0))
+        name_text = leaderboard_font.render(entry[0], 1, (255, 255, 0))
+        score_text = leaderboard_font.render(str(entry[1]), 1, (255, 255, 0))
+
+        y = 100 + index * 60
+        WIN.blit(rank_text, (100, y))
+        WIN.blit(name_text, (200, y))
+        WIN.blit(score_text, (500, y))
+
+    pygame.display.update()
+
+    waiting = True
+    while waiting:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                waiting = False
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    waiting = False
+
 def game_over_screen(score):
     """
     Displays the game over screen and waits for 3 seconds before returning to the start menu
     :param score: the final score of the game
     """
-    font = pygame.font.Font("Gypsy Curse.ttf", 120)
-    text = font.render("Game Over", 1, (255, 255, 255))
-    score_text = font.render("Score: " + str(score), 1, (255, 255, 255))
+    text_input = TextInput(WIN_WIDTH // 2 - 250, WIN_HEIGHT // 2 + 20, 500, 60, "Gypsy Curse.ttf", 50, (255, 255, 255))
+    enter_name_text = pygame.font.Font("Gypsy Curse.ttf", 70).render("Enter your name:", 1, (255, 255, 255))
 
-    WIN.fill((0, 0, 0))
-    WIN.blit(text, (WIN_WIDTH / 2 - text.get_width() / 2, WIN_HEIGHT / 2 - text.get_height()))
-    WIN.blit(score_text, (WIN_WIDTH / 2 - score_text.get_width() / 2, WIN_HEIGHT / 2))
-    pygame.display.update()
+    clock = pygame.time.Clock()
 
-    # Wait for 3 seconds
-    pygame.time.delay(1500)
+    # Use a loop to handle user input
+    while True:
+        # Listen for events in the event queue
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    # If the user presses the ESC key, return to the main menu without saving their data
+                    start_menu()
+                # If the user presses enter, get their name and exit the loop
+                if event.key == pygame.K_RETURN:
+                    player_name = text_input.get_text()
+                    success = update_leaderboard(player_name, score)
+                    if success:
+                        start_menu()
+                    else:
+                        # If there was an error updating the leaderboard, display an error message and reset the text input
+                        error_text = pygame.font.Font("Gypsy Curse.ttf", 40).render("Error updating leaderboard. Please try again.", 1, (255, 0, 0))
+                        WIN.blit(error_text, (WIN_WIDTH // 2 - error_text.get_width() // 2, WIN_HEIGHT // 2 + 150))
+                        pygame.display.update()
+                        text_input.text = ""
 
-    # Return to the start menu
-    start_menu()
+                # Call the handle_event method of the TextInput object to handle the key press
+                text_input.handle_event(event)
+
+        # Redraw the screen with the updated text input and the "Game Over" text
+        WIN.fill((2, 29, 49))
+        WIN.blit(enter_name_text, (WIN_WIDTH // 2 - enter_name_text.get_width() // 2, WIN_HEIGHT // 2 - 100))
+        text_input.draw(WIN)
+        font = pygame.font.Font("Gypsy Curse.ttf", 120)
+        game_over_text = font.render("Game Over", 1, (255, 255, 0))
+        score_text = font.render("Score: " + str(score), 1, (255, 255, 0))
+        WIN.blit(game_over_text, (WIN_WIDTH // 2 - game_over_text.get_width() // 2, WIN_HEIGHT // 2 - game_over_text.get_height() - 340)) # - value to move up from center (y-value)
+        WIN.blit(score_text, (WIN_WIDTH // 2 - score_text.get_width() // 2, WIN_HEIGHT // 2 - 340)) # - value to move up from center (y-value)
+        pygame.display.update()
+
+        # Limit the frame rate to reduce CPU usage
+        clock.tick(FPS)
+
+        # Wait for 3 seconds
+        #pygame.time.delay(1500)
+
+        # Return to the start menu
+        #start_menu()
+
 
 if __name__ == '__main__':
     # Determine path to configuration file. This path manipulation is
