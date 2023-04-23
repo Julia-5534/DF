@@ -48,10 +48,17 @@ This project is interpreted/tested on Ubuntu 20.04 LTS using python3
 ** INSERT PICS OF LANTERNS **
 
 
+<style>
+    .img-scale {
+        transform: scale(0.5);
+        transform-origin: 0 0;
+    }
+</style>
+
 <p align="center">
-  <img src="RM_imgs/RM_GL.png" alt="RM_GL" style="transform: scale(0.25);">
-  <img src="RM_imgs/RM_RSL.png" alt="RM_RSL" style="transform: scale(0.25);">
-  <img src="RM_imgs/RM_HL.png" alt="RM_HL" style="transform: scale(0.25);">
+  <img src="RM_imgs/RM_GL.png" alt="RM_GL" class="img-scale">
+  <img src="RM_imgs/RM_RSL.png" alt="RM_RSL" class="img-scale">
+  <img src="RM_imgs/RM_HL.png" alt="RM_HL" class="img-scale">
 </p>
 
 
