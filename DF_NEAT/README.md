@@ -1,4 +1,4 @@
-![Death Farts](https://github.com/Julia-5534/DF/DF_NEAT/RM_imgs/DFLogo.png)
+![Death Farts](RM_imgs/DFLogo.png)
 An Utter Masterpiece&trade; By
 Julia Bullard <github.com/Julia-5534>
 Mason Counts <github.com/spindouken>
@@ -29,26 +29,26 @@ This project is interpreted/tested on Ubuntu 20.04 LTS using python3
 - What do we use for our "pipes"?
     - Lantern Staff in three different colors, one for each of our three backgrounds.
 ** INSERT PICS OF LANTERNS **
-![RM_GL](https://github.com/Julia-5534/DF/DF_NEAT/RM_imgs/RM_GL.png)
-![RM_RSL](https://github.com/Julia-5534/DF/DF_NEAT/RM_imgs/RM_RSL.png)
-![RM_HL](https://github.com/Julia-5534/DF/DF_NEAT/RM_imgs/RM_HL.png)
+![RM_GL](RM_imgs/RM_GL.png)
+![RM_RSL](RM_imgs/RM_RSL.png)
+![RM_HL](RM_imgs/RM_HL.png)
 
 - How do we implement a seamless side scrolling background?
     - Mirror your image and save it as a separate file.
     - Double the width of your canvas size on your OG image, shift OG image to the left.
     - Place your mirrored image on the right side of the canvas. Voila!
 ** INSERT PICS OF STEPS **
-![BB_RM_GBG1](https://github.com/Julia-5534/DF/DF_NEAT/RM_imgs/BB_RM_GBG1.png)
-![BB_RM_GBG2](https://github.com/Julia-5534/DF/DF_NEAT/RM_imgs/BB_RM_GBG2.png)
-![BB_RM_GBG3](https://github.com/Julia-5534/DF/DF_NEAT/RM_imgs/BB_RM_GBG3.png)
-![BB_RM_GBG4](https://github.com/Julia-5534/DF/DF_NEAT/RM_imgs/BB_RM_GBG4.png)
+![BB_RM_GBG1](RM_imgs/BB_RM_GBG1.png)
+![BB_RM_GBG2](RM_imgs/BB_RM_GBG2.png)
+![BB_RM_GBG3](RM_imgs/BB_RM_GBG3.png)
+![BB_RM_GBG4](RM_imgs/BB_RM_GBG4.png)
 
 - How can we easily make our three backgrounds blend together better?
     - Add clouds to the top of the background images to help create a slight illusion of seamless blending
 ** INSERT PICS OF CLOUDED BACKGRONDS **
-![RM_GBG](https://github.com/Julia-5534/DF/DF_NEAT/RM_imgs/RM_GBG.png)
-![RM_RSBG](https://github.com/Julia-5534/DF/DF_NEAT/RM_imgs/RM_RSBG.png)
-![RM_HBG](https://github.com/Julia-5534/DF/DF_NEAT/RM_imgs/RM_HBG.png)
+![RM_GBG](RM_imgs/RM_GBG.png)
+![RM_RSBG](RM_imgs/RM_RSBG.png)
+![RM_HBG](RM_imgs/RM_HBG.png)
 
 - How do we implement a leaderboard?
     -
