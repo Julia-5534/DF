@@ -48,9 +48,9 @@ This project is interpreted/tested on Ubuntu 20.04 LTS using python3
 ** INSERT PICS OF LANTERNS **
 
 <p align="center">
-  <img src="RM_imgs/RM_GL.png" alt="RM_GL" width="30%">
-  <img src="RM_imgs/RM_RSL.png" alt="RM_RSL" width="30%">
-  <img src="RM_imgs/RM_HL.png" alt="RM_HL" width="30%">
+  <img src="RM_imgs/RM_GL.png" alt="RM_GL" height="10%">
+  <img src="RM_imgs/RM_RSL.png" alt="RM_RSL" height="10%">
+  <img src="RM_imgs/RM_HL.png" alt="RM_HL" height="10%">
 </p>
 
 
