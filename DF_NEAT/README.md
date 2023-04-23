@@ -1,3 +1,4 @@
+<div style="background-color:#001b30">
 <p align="center">
   <img src="RM_imgs/DFLogo.png" alt="Death Farts">
 </p>
@@ -113,3 +114,4 @@ Mason Count - [Github](https://github.com/spindouken)
 
 ## :scroll: License :scroll:
 No touchy! (Insert photo of Llama Cuzco. No, don't. Disney would totally sue.)
+</div>
