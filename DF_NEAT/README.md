@@ -62,8 +62,7 @@ This project is interpreted/tested on Ubuntu 20.04 LTS using python3
   margin-right: 30%">
   <img src="RM_imgs/RM_RSL.png" alt="RM_RSL" style="max-width: 50%; height: auto;
   margin-right: 30%">
-  <img src="RM_imgs/RM_HL.png" alt="RM_HL" style="max-width: 50%; height: auto;
-  margin-right: 30%">
+  <img src="RM_imgs/RM_HL.png" alt="RM_HL" style="max-width: 50%; height: auto;">
 </p>
 
 
