@@ -4,6 +4,9 @@ import os
 import random
 import sys
 import math
+# from pygame_textinput import TextInput
+import requests
+
 
 FPS = 60
 stage = 1
@@ -15,7 +18,7 @@ WIN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
 FLOOR = 1000
 
 pygame.font.init()
-STAT_FONT = pygame.font.SysFont("comicsans", 50)
+STAT_FONT = pygame.font.Font("Gypsy Curse.ttf", 50)
 
 
 # Load images
@@ -25,11 +28,14 @@ BIRD_IMGS = [pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "df
 PIPE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", f"pipeBottom_stage{stage}.png")))
 PIPE_BOTTOM = PIPE_IMG
 #PIPE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "pipe.png")))
-BASE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "base.png")))
+BASE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", f"fground_stage{stage}.png")).convert())
 BG_IMG = pygame.image.load(os.path.join("imgs", f"bg_stage{stage}.png")).convert()
-FART_IMGS = [pygame.image.load(os.path.join("imgs", "PinkCloudS.png")),
-             pygame.image.load(os.path.join("imgs", "PinkCloudS.png")),
-             pygame.image.load(os.path.join("imgs", "PinkCloudS.png"))]
+FART_IMGS = [pygame.image.load(os.path.join("imgs", "cloud_2.png")),
+             pygame.image.load(os.path.join("imgs", "GreenCloudS.png")),
+             pygame.image.load(os.path.join("imgs", "cloud_2.png")),
+             pygame.image.load(os.path.join("imgs", "YellowCloudS.png")),
+             pygame.image.load(os.path.join("imgs", "cloud_3.png")),
+             pygame.image.load(os.path.join("imgs", "GreenCloudS.png"))]
 
 
 gen = 0  # Initialize the generation counter
@@ -38,7 +44,7 @@ DRAW_LINES = True
 class Bird:
     IMGS = BIRD_IMGS
     MAX_ROTATION = 25
-    ROT_VEL = 20
+    ROT_VEL = 2
     ANIMATION_TIME = 5
 
     def __init__(self, x, y):
@@ -56,7 +62,7 @@ class Bird:
         self.active_farts = []  # farts - Initialize the list of active farts
 
     def jump(self):
-        self.vel = -10.5
+        self.vel = -9.5
         self.tick_count = 0
         self.height = self.y
 
@@ -124,21 +130,33 @@ class Bird:
 
 class Fart:
     def __init__(self, bird_x, bird_y, angle):
-        self.x = bird_x - 0 * math.cos(math.radians(angle)) # move fart closer death
-        self.y = bird_y + 20 - 60 * math.sin(math.radians(angle))
-        self.imgs = FART_IMGS
+        angle_deviation = random.uniform(-20, 20) # add random deviation to initial angle of fart (angle of self.angle)
+        self.angle = angle + angle_deviation
+        # move x axis of fart closer to death (bird_x - value)
+        self.x = bird_x + 35 * math.cos(math.radians(self.angle))
+        # move y axis of fart closer to death (+ value at end)
+        self.y = bird_y + 20 - 60 * math.sin(math.radians(self.angle)) + 145
+        self.imgs = []
+        for img in FART_IMGS:
+            scale = random.uniform(0.6, 1.4)
+            scaled_img = pygame.transform.scale(img, (int(img.get_width() * scale), int(img.get_height() * scale)))
+            self.imgs.append(scaled_img)
         self.img_count = 0
         self.img = self.imgs[0]
         self.timer = 0  # initialize timer to 0
-        self.fade_time = 1.0  # set fade time to 1 second
+        self.fade_time = 2.0  # time for fart to fade out
         self.opacity = 1.0  # initialize opacity to 100%
-        self.angle = angle
+        self.initial_size = 50  # Set the initial size of the fart image
+        self.current_size = self.initial_size  # Store the current size of the fart image
+        self.size_increase_rate = 50  # Set the rate at which the size increases
 
-        # calculate horizontal and vertical components of velocity based on angle and launch speed
-        launch_speed = 10.0
-        angle_rad = math.radians(angle)
-        self.vx = launch_speed * math.cos(angle_rad)
-        self.vy = -launch_speed * math.sin(angle_rad)
+        # calculate fart launch speed with random factor
+        launch_speed = random.uniform(-10.0, -50.0)
+
+        # calculate horizontal and vertical components of velocity based on angle and launch speed with random components
+        angle_rad = math.radians(self.angle)
+        self.vx = launch_speed * math.cos(angle_rad) + random.uniform(-1, 1)
+        self.vy = -launch_speed * math.sin(angle_rad) + random.uniform(-1, 1)
 
     def draw(self, win):
         # calculate time since last frame
@@ -148,14 +166,22 @@ class Fart:
         self.x += self.vx * dt
         self.y += self.vy * dt
 
+        # add random drift to velocity
+        self.vx += random.uniform(-20, 0) # second value as 0 means fart will not fly into face ;]
+        self.vy += random.uniform(-40, 40)
+
         # update opacity based on time elapsed
         self.opacity -= dt / self.fade_time
         if self.opacity < 0:
             self.opacity = 0
 
-        # set image alpha and draw on window
+        # Update the size of the fart image
+        self.current_size += self.size_increase_rate / FPS
+
+        # Scale the image based on the current size and set the alpha value
+        scaled_img = pygame.transform.scale(self.img, (int(self.current_size), int(self.current_size)))
         alpha = int(255 * self.opacity)
-        rotated_img = pygame.transform.rotate(self.img, self.angle)
+        rotated_img = pygame.transform.rotate(scaled_img, self.angle)
         rotated_img.set_alpha(alpha)
         win.blit(rotated_img, (self.x, self.y))
 
@@ -167,6 +193,10 @@ class Fart:
             self.img = self.imgs[1]
         elif self.img_count < 15:
             self.img = self.imgs[2]
+        elif self.img_count < 20:
+            self.img = self.imgs[3]
+        elif self.img_count < 25:
+            self.img = self.imgs[4]
         else:
             self.img_count = 0
 
@@ -176,20 +206,21 @@ class Fart:
 
 class Pipe:
     #values below are to change obstacle 
-    GAP = 500
-    VEL = 5.5
+    GAP = 370
+    VEL = 5
 
     def __init__(self, x, stage):
         self.x = x
         self.height = 0
         # alter gap between obstacles
-        self.gap = 500
+        self.gap = 370
         self.top = 0
         self.bottom = 0
-        self.PIPE_BOTTOM = PIPE_IMG
+        self.PIPE_BOTTOM = pygame.image.load(os.path.join("imgs", f"pipeBottom_stage{stage}.png")).convert_alpha()
         self.PIPE_TOP = pygame.transform.flip(self.PIPE_BOTTOM, False, True)
         self.passed = False
         self.set_height()
+        self.stage = stage
 
     def set_height(self):
         self.height = random.randrange(50, 450)
@@ -220,14 +251,15 @@ class Pipe:
         return False
 
 class Base:
-    VEL = 5
+    VEL = 5.65
     WIDTH = BASE_IMG.get_width()
     IMG = BASE_IMG
 
-    def __init__(self, y):
+    def __init__(self, y, stage):
         self.y = y
         self.x1 = 0
         self.x2 = self.WIDTH
+        self.IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", f"fground_stage{stage}.png")).convert())
 
     def move(self):
         self.x1 -= self.VEL
@@ -244,7 +276,7 @@ class Base:
         win.blit(self.IMG, (self.x2, self.y))
 
 class Background:
-    VEL = 1
+    VEL = .5
 
     def __init__(self, stage):
         self.stage = stage
@@ -268,7 +300,7 @@ class Background:
         win.blit(self.BG_IMG, (self.x1, 0))
         win.blit(self.BG_IMG, (self.x2, 0))
 
-def draw_window(win, birds, pipes, base, background, score, gen, pipe_ind):
+def draw_window(win, birds, pipes, base, background, score, gen, pipe_ind, draw_lines=True):
     """
     draws the windows for the main game loop
     :param win: pygame window surface
@@ -289,14 +321,14 @@ def draw_window(win, birds, pipes, base, background, score, gen, pipe_ind):
 
     base.draw(win)
     for bird in birds:
-        if DRAW_LINES:
+        bird.draw(win)
+        bird.draw_farts(win)
+        if draw_lines:
             try:
                 pygame.draw.line(win, (255,0,0), (bird.x+bird.img.get_width()/2, bird.y + bird.img.get_height()/2), (pipes[pipe_ind].x + pipes[pipe_ind].PIPE_TOP.get_width()/2, pipes[pipe_ind].height), 5)
                 pygame.draw.line(win, (255,0,0), (bird.x+bird.img.get_width()/2, bird.y + bird.img.get_height()/2), (pipes[pipe_ind].x + pipes[pipe_ind].PIPE_BOTTOM.get_width()/2, pipes[pipe_ind].bottom), 5)
             except:
                 pass
-        bird.draw(win)
-        bird.draw_farts(win)
 
     score_label = STAT_FONT.render("Score: " + str(score),1,(255,255,255))
     win.blit(score_label, (WIN_WIDTH - score_label.get_width() - 15, 10))
@@ -314,7 +346,8 @@ def get_current_stage(score):
         return 1
     elif score < 20:
         return 2
-    # Add more stages as needed
+    elif score < 30:
+        return 3
     else:
         return 3
 
@@ -341,27 +374,27 @@ def eval_genomes(genomes, config):
         birds.append(Bird(230,350))
         ge.append(genome)
 
-    base = Base(FLOOR)
-
+    score = 0
     stage = get_current_stage(score)
+    base = Base(FLOOR, stage)
     background = Background(stage)
     pipes = [Pipe(WIN_WIDTH, stage)]
-    #pipes = [Pipe(700)]
-    score = 0
-    #background = Background()  # Create the background object
 
 	# Create a clock object before the game loop begins
     clock = pygame.time.Clock()
 
     run = True
     while run and len(birds) > 0:
-        clock.tick(FPS) # set fps
+        clock.tick(60) # set fps
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
                 pygame.quit()
                 quit()
+                break
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                start_menu()
                 break
 
         pipe_ind = 0
@@ -463,7 +496,7 @@ def run_game(config_file):
 
 
 def start_menu():
-    menu_image = pygame.image.load(os.path.join("imgs", "DFmenuscreen.png"))    
+    menu_image = pygame.image.load(os.path.join("imgs", "DFMenuFinal.png"))    
     screen_width, screen_height = WIN.get_size()
     image_width, image_height = menu_image.get_size()
     x = (screen_width - image_width) // 2
@@ -473,11 +506,14 @@ def start_menu():
     while run:
         WIN.blit(menu_image, (x, y))
 
-        button_font = pygame.font.SysFont("comicsans", 40)
-        manual_button = button_font.render("Play Manually", 1, (0, 0, 0))
-        ai_button = button_font.render("Watch AI", 1, (0, 0, 0))
-        WIN.blit(manual_button, (WIN_WIDTH // 2 - manual_button.get_width() // 2, 350))
-        WIN.blit(ai_button, (WIN_WIDTH // 2 - ai_button.get_width() // 2, 450))
+        button_font = pygame.font.Font("Gypsy Curse.ttf", 75)
+        manual_button = button_font.render("Play Manually", 1, (255, 255, 0))
+        ai_button = button_font.render("Watch  A.I.", 1, (255, 255, 0))
+        leaderboard_button = button_font.render("Leaderboard", 1, (255, 255, 0))
+        WIN.blit(manual_button, (WIN_WIDTH // 2 - manual_button.get_width() // 2, 837))
+        WIN.blit(ai_button, (WIN_WIDTH // 2 - ai_button.get_width() // 2, 974))
+        WIN.blit(leaderboard_button, (WIN_WIDTH // 2 - leaderboard_button.get_width() // 2, 1110))
+
 
         pygame.display.update()
 
@@ -489,29 +525,37 @@ def start_menu():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
-                if (WIN_WIDTH // 2 - manual_button.get_width() // 2 <= mouse_x <= WIN_WIDTH // 2 + manual_button.get_width() // 2) and (350 <= mouse_y <= 390):
+                if (WIN_WIDTH // 2 - manual_button.get_width() // 2 <= mouse_x <= WIN_WIDTH // 2 + manual_button.get_width() // 2) and (870 <= mouse_y <= 950):
                     run = False
                     manual_play()
-                elif (WIN_WIDTH // 2 - ai_button.get_width() // 2 <= mouse_x <= WIN_WIDTH // 2 + ai_button.get_width() // 2) and (450 <= mouse_y <= 490):
+                elif (WIN_WIDTH // 2 - ai_button.get_width() // 2 <= mouse_x <= WIN_WIDTH // 2 + ai_button.get_width() // 2) and (1000 <= mouse_y <= 1080):
                     run = False
                     local_dir = os.path.dirname(__file__)
                     config_path = os.path.join(local_dir, 'config-feedforward.txt')
                     run_game(config_path)
+                elif (WIN_WIDTH // 2 - leaderboard_button.get_width() // 2 <= mouse_x <= WIN_WIDTH // 2 + leaderboard_button.get_width() // 2) and (1110 <= mouse_y <= 1190):
+                    show_leaderboard()
+                        # Check for the M key press event for manual play
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_TAB:
+                    run = False
+                    manual_play()
 
 def manual_play():
     bird = Bird(230, 350)
-    base = Base(FLOOR)
-    clock = pygame.time.Clock()
-    win = WIN
     score = 0
 
     stage = get_current_stage(score)
+    base = Base(FLOOR, stage)
     background = Background(stage)
     pipes = [Pipe(WIN_WIDTH, stage)]
 
+    clock = pygame.time.Clock()
+    win = WIN
+
     running = True
     while running:
-        clock.tick(30)
+        clock.tick(60)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -521,6 +565,9 @@ def manual_play():
                 if event.key == pygame.K_SPACE:
                         bird.jump()
                         bird.fart()
+                elif event.key == pygame.K_ESCAPE:
+                    running = False
+                    game_over_screen(score)
 
         bird.move()
         base.move()
@@ -531,7 +578,7 @@ def manual_play():
         for pipe in pipes:
             pipe.move()
             if pipe.collide(bird):
-                running = False
+                game_over_screen(score)
 
             if pipe.x + pipe.PIPE_TOP.get_width() < 0:
                 rem.append(pipe)
@@ -553,11 +600,164 @@ def manual_play():
             pipes.remove(r)
 
         if bird.y + bird.img.get_height() - 10 >= FLOOR or bird.y < -50:
-            running = False
+            game_over_screen(score)
 
-        draw_window(win, [bird], pipes, base, background, score, 0, 0)
+        draw_window(win, [bird], pipes, base, background, score, 0, 0, draw_lines=False)
 
     print("Game Over!")
+
+class TextInput:
+    def __init__(self, x, y, width, height, font, font_size, color, text=""):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.font = pygame.font.Font(font, font_size)
+        self.color = color
+        self.text = text
+
+    def draw(self, surface):
+        pygame.draw.rect(surface, self.color, (self.x, self.y, self.width, self.height), 1)
+        text_surface = self.font.render(self.text, True, self.color)
+        surface.blit(text_surface, (self.x + 5, self.y + 5))
+
+    def handle_event(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RETURN:
+                return self.text
+            elif event.key == pygame.K_BACKSPACE:
+                self.text = self.text[:-1]
+            else:
+                self.text += event.unicode
+        return None
+
+    def get_text(self):
+        return self.text
+
+def update_leaderboard(name, score):
+    leaderboard_file = "leaderboard.txt"
+    top_scores = []
+
+    with open(leaderboard_file, 'r') as file:
+        lines = file.readlines()
+        for line in lines:
+            entry = line.strip().split(':')
+            if len(entry) == 2:
+                top_scores.append((entry[0], int(entry[1])))
+
+    top_scores.append((name, score))
+    top_scores.sort(key=lambda x: x[1], reverse=True)
+    top_scores = top_scores[:100]
+
+    with open(leaderboard_file, 'w') as file:
+        for name, score in top_scores:
+            file.write(f"{name}:{score}\n")
+
+    return True
+
+def show_leaderboard():
+    leaderboard_file = "leaderboard.txt"
+    leaderboard = []
+
+    with open(leaderboard_file, 'r') as file:
+        lines = file.readlines()
+        for line in lines:
+            entry = line.strip().split(':')
+            if len(entry) >= 2:  # Check if entry has at least two items
+                leaderboard.append((entry[0], int(entry[1])))
+
+    leaderboard_font = pygame.font.Font("Gypsy Curse.ttf", 50)
+    WIN.fill((0, 0, 0))
+
+    for index, entry in enumerate(leaderboard[:10]):  # Show top 10 scores
+        rank_text = leaderboard_font.render(f"{index + 1}.", 1, (255, 255, 0))
+        name_text = leaderboard_font.render(entry[0], 1, (255, 255, 0))
+        score_text = leaderboard_font.render(str(entry[1]), 1, (255, 255, 0))
+
+        y = 100 + index * 60
+        WIN.blit(rank_text, (100, y))
+        WIN.blit(name_text, (200, y))
+        WIN.blit(score_text, (500, y))
+
+    pygame.display.update()
+
+    waiting = True
+    while waiting:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                waiting = False
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    waiting = False
+
+def game_over_screen(score):
+    """
+    Displays the game over screen and waits for 3 seconds before returning to the start menu
+    :param score: the final score of the game
+    """
+    text_input = TextInput(WIN_WIDTH // 2 - 250, WIN_HEIGHT // 2 + 20, 500, 60, "Gypsy Curse.ttf", 50, (255, 255, 255))
+    enter_name_text = pygame.font.Font("Gypsy Curse.ttf", 70).render("Enter your name:", 1, (255, 255, 255))
+
+    clock = pygame.time.Clock()
+
+    # Use a loop to handle user input
+    while True:
+        # Listen for events in the event queue
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    # If the user presses the ESC key, return to the main menu without saving their data
+                    start_menu()
+                # If the user presses enter, get their name and exit the loop
+                if event.key == pygame.K_RETURN:
+                    player_name = text_input.get_text()
+                    success = update_leaderboard(player_name, score)
+                    if success:
+                        start_menu()
+                    else:
+                        # If there was an error updating the leaderboard, display an error message and reset the text input
+                        error_text = pygame.font.Font("Gypsy Curse.ttf", 40).render("Error updating leaderboard. Please try again.", 1, (255, 0, 0))
+                        WIN.blit(error_text, (WIN_WIDTH // 2 - error_text.get_width() // 2, WIN_HEIGHT // 2 + 150))
+                        pygame.display.update()
+                        text_input.text = ""
+
+                # Call the handle_event method of the TextInput object to handle the key press
+                text_input.handle_event(event)
+
+                if event.key == pygame.K_TAB:
+                    manual_play()
+
+        # Redraw the screen with the updated text input and the "Game Over" text
+        WIN.fill((2, 29, 49))
+        WIN.blit(enter_name_text, (WIN_WIDTH // 2 - enter_name_text.get_width() // 2, WIN_HEIGHT // 2 - 100))
+        text_input.draw(WIN)
+        font = pygame.font.Font("Gypsy Curse.ttf", 120)
+        small_font = pygame.font.Font("Gypsy Curse.ttf", 45)
+        game_over_text = font.render("Game Over", 1, (255, 255, 0))
+        score_text = font.render("Score: " + str(score), 1, (255, 255, 0))
+        play_again = pygame.font.Font("Gypsy Curse.ttf", 100).render("Play Again", 1, (255, 255, 0))
+        press_tab = pygame.font.Font("Open 24 Display St.ttf", 25).render("Press Tab", 1, (255, 255, 0))
+        esc_text = small_font.render("Hit ESC key to return to menu", 1, (255, 255, 255))
+
+        WIN.blit(game_over_text, (WIN_WIDTH // 2 - game_over_text.get_width() // 2, WIN_HEIGHT // 2 - game_over_text.get_height() - 340)) # - value to move up from center (y-value)
+        WIN.blit(score_text, (WIN_WIDTH // 2 - score_text.get_width() // 2, WIN_HEIGHT // 2 - 340)) # - value to move up from center (y-value)
+        WIN.blit(play_again, (WIN_WIDTH // 2 - play_again.get_width() // 2, WIN_HEIGHT // 2 + 300))
+        WIN.blit(esc_text, (WIN_WIDTH // 2 - esc_text.get_width() // 2, 1020))
+        WIN.blit(press_tab, (WIN_WIDTH // 2 - esc_text.get_width() // 2 + 300, 1000))
+
+        pygame.display.update()
+
+        # Limit the frame rate to reduce CPU usage
+        clock.tick(FPS)
+
+        # Wait for 3 seconds
+        #pygame.time.delay(1500)
+
 
 if __name__ == '__main__':
     # Determine path to configuration file. This path manipulation is
