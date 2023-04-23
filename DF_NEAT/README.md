@@ -63,8 +63,8 @@ This project is interpreted/tested on Ubuntu 20.04 LTS using python3
 </p>
 
 <p align="center">
-  <img src="RM_imgs/RM_GL.png" alt="RM_GL" style="width: 7%; padding-right: 1000px;">
-  <img src="RM_imgs/RM_RSL.png" alt="RM_RSL" style="width: 7%; padding-right: 1000px;">
+  <img src="RM_imgs/RM_GL.png" alt="RM_GL" style="width: 7%; padding-right: 20%;">
+  <img src="RM_imgs/RM_RSL.png" alt="RM_RSL" style="width: 7%; padding-right: 20%;">
   <img src="RM_imgs/RM_HL.png" alt="RM_HL" style="width: 7%;">
 </p>
 
