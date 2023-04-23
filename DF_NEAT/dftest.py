@@ -7,6 +7,7 @@ import math
 # from pygame_textinput import TextInput
 import requests
 
+
 FPS = 60
 stage = 1
 
@@ -29,8 +30,8 @@ PIPE_BOTTOM = PIPE_IMG
 #PIPE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "pipe.png")))
 BASE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", f"fground_stage{stage}.png")).convert())
 BG_IMG = pygame.image.load(os.path.join("imgs", f"bg_stage{stage}.png")).convert()
-FART_IMGS = [pygame.image.load(os.path.join("imgs", "cloud_1.png")),
-             pygame.image.load(os.path.join("imgs", "PinkCloudS.png")),
+FART_IMGS = [pygame.image.load(os.path.join("imgs", "cloud_2.png")),
+             pygame.image.load(os.path.join("imgs", "GreenCloudS.png")),
              pygame.image.load(os.path.join("imgs", "cloud_2.png")),
              pygame.image.load(os.path.join("imgs", "YellowCloudS.png")),
              pygame.image.load(os.path.join("imgs", "cloud_3.png")),
@@ -132,9 +133,9 @@ class Fart:
         angle_deviation = random.uniform(-20, 20) # add random deviation to initial angle of fart (angle of self.angle)
         self.angle = angle + angle_deviation
         # move x axis of fart closer to death (bird_x - value)
-        self.x = bird_x - 0 * math.cos(math.radians(self.angle))
+        self.x = bird_x + 35 * math.cos(math.radians(self.angle))
         # move y axis of fart closer to death (+ value at end)
-        self.y = bird_y + 20 - 60 * math.sin(math.radians(self.angle)) + 70
+        self.y = bird_y + 20 - 60 * math.sin(math.radians(self.angle)) + 145
         self.imgs = []
         for img in FART_IMGS:
             scale = random.uniform(0.6, 1.4)
@@ -145,6 +146,9 @@ class Fart:
         self.timer = 0  # initialize timer to 0
         self.fade_time = 2.0  # time for fart to fade out
         self.opacity = 1.0  # initialize opacity to 100%
+        self.initial_size = 50  # Set the initial size of the fart image
+        self.current_size = self.initial_size  # Store the current size of the fart image
+        self.size_increase_rate = 50  # Set the rate at which the size increases
 
         # calculate fart launch speed with random factor
         launch_speed = random.uniform(-10.0, -50.0)
@@ -171,9 +175,13 @@ class Fart:
         if self.opacity < 0:
             self.opacity = 0
 
-        # set image alpha and draw on window
+        # Update the size of the fart image
+        self.current_size += self.size_increase_rate / FPS
+
+        # Scale the image based on the current size and set the alpha value
+        scaled_img = pygame.transform.scale(self.img, (int(self.current_size), int(self.current_size)))
         alpha = int(255 * self.opacity)
-        rotated_img = pygame.transform.rotate(self.img, self.angle)
+        rotated_img = pygame.transform.rotate(scaled_img, self.angle)
         rotated_img.set_alpha(alpha)
         win.blit(rotated_img, (self.x, self.y))
 
@@ -498,7 +506,7 @@ def start_menu():
     while run:
         WIN.blit(menu_image, (x, y))
 
-        button_font = pygame.font.Font("Gypsy Curse.ttf", 100)
+        button_font = pygame.font.Font("Gypsy Curse.ttf", 75)
         manual_button = button_font.render("Play Manually", 1, (255, 255, 0))
         ai_button = button_font.render("Watch  A.I.", 1, (255, 255, 0))
         leaderboard_button = button_font.render("Leaderboard", 1, (255, 255, 0))
