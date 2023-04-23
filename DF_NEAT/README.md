@@ -1,4 +1,4 @@
-<div style="background-color:#001b30">
+<div style="background-color:#001b30 !important;">
 
 
 <p align="center">
