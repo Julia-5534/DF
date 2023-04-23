@@ -49,9 +49,9 @@ This project is interpreted/tested on Ubuntu 20.04 LTS using python3
 
 
 <p align="center">
-  <img src="RM_imgs/RM_GL.png" alt="RM_GL" style="max-width: 50%; height: auto;">
-  <img src="RM_imgs/RM_RSL.png" alt="RM_RSL" style="max-width: 50%; height: auto;">
-  <img src="RM_imgs/RM_HL.png" alt="RM_HL" style="max-width: 50%; height: auto;">
+  <img src="RM_imgs/RM_GL.png" alt="RM_GL" height="5%" style="margin-right: 10px">
+  <img src="RM_imgs/RM_RSL.png" alt="RM_RSL" height="5%" style="margin-right: 10px">
+  <img src="RM_imgs/RM_HL.png" alt="RM_HL" height="5%">
 </p>
 
 
