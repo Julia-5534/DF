@@ -105,6 +105,7 @@ No known bugs at this time.
 
 ## :memo: Authors :memo:
 Julia Bullard - [Github](https://github.com/Julia-5534)
+
 Mason Count - [Github](https://github.com/spindouken) 
 
 
