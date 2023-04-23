@@ -46,6 +46,7 @@ This project is interpreted/tested on Ubuntu 20.04 LTS using python3
 - What do we use for our "pipes"?
     - Lantern Staff in three different colors, one for each of our three backgrounds.
 ** INSERT PICS OF LANTERNS **
+
 ![RM_GL](RM_imgs/RM_GL.png)
 ![RM_RSL](RM_imgs/RM_RSL.png)
 ![RM_HL](RM_imgs/RM_HL.png)
