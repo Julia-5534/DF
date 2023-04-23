@@ -57,7 +57,7 @@ This project is interpreted/tested on Ubuntu 20.04 LTS using python3
 
 
 <p align="center">
-  <img src="RM_imgs/BB_RM_GBG1.png" alt="RM_GBG1" width="30%">
+  <img src="RM_imgs/BB_RM_GBG1.png" alt="RM_GBG1" width="30%" style="margin-right: 100px">
   <img src="RM_imgs/BB_RM_GBG3.png" alt="RM_GBG3" width="60%">
 </p>
 <p align="center">
