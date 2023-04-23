@@ -71,7 +71,7 @@ This project is interpreted/tested on Ubuntu 20.04 LTS using python3
 
 
 - How do we implement a leaderboard?
-    -
+    - Put Masons steps in here
 ** INSERT GIF OF LEADERBOARD **
 - How do we delay the obstacles in the beginning so you don't immediately crash?
     - Add a function to the game screen where you have to tap once for the game to start.
