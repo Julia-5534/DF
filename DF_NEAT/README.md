@@ -69,11 +69,11 @@ This project is interpreted/tested on Ubuntu 20.04 LTS using python3
 ** INSERT PICS OF CLOUDED BACKGRONDS **
 
 
-<div style="display: flex; justify-content: space-between;">
+<p align="center">
   <img src="RM_imgs/BB_RM_GBG.png" alt="RM_GBG" width="30%">
   <img src="RM_imgs/BB_RM_RSBG.png" alt="RM_RSBG" width="30%">
   <img src="RM_imgs/BB_RM_HBG.png" alt="RM_HBG" width="30%">
-</div>
+</p>
 
 
 - How do we implement a leaderboard?
