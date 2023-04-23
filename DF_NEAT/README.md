@@ -55,15 +55,17 @@ This project is interpreted/tested on Ubuntu 20.04 LTS using python3
     - Place your mirrored image on the right side of the canvas. Voila!
 ** INSERT PICS OF STEPS **
 
-![BB_RM_GBG1](RM_imgs/BB_RM_GBG1.png)
-![BB_RM_GBG2](RM_imgs/BB_RM_GBG2.png)
-![BB_RM_GBG3](RM_imgs/BB_RM_GBG3.png)
-![BB_RM_GBG4](RM_imgs/BB_RM_GBG4.png)
+
+<p align="center">
+  <img src="RM_imgs/BB_RM_GBG1.png" alt="RM_GBG1" width="30%">
+  <img src="RM_imgs/BB_RM_GBG3.png" alt="RM_GBG3" width="30%">
+  <img src="RM_imgs/BB_RM_GBG2.png" alt="RM_GBG2" width="30%">
+  <img src="RM_imgs/BB_RM_GBG4.png" alt="RM_GBG4" width="30%">
+</p>
 
 
 - How can we easily make our three backgrounds blend together better?
     - Add clouds to the top of the background images to help create a slight illusion of seamless blending
-** INSERT PICS OF CLOUDED BACKGRONDS **
 
 
 <p align="center">
