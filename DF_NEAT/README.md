@@ -68,9 +68,9 @@ This project is interpreted/tested on Ubuntu 20.04 LTS using python3
     - Add clouds to the top of the background images to help create a slight illusion of seamless blending
 ** INSERT PICS OF CLOUDED BACKGRONDS **
 
-![RM_GBG](RM_imgs/BB_RM_GBG.png){ width = 30% }
-![RM_RSBG](RM_imgs/BB_RM_RSBG.png){ width = 30% }
-![RM_HBG](RM_imgs/BB_RM_HBG.png){ width = 30% }
+![RM_GBG](RM_imgs/BB_RM_GBG.png){ width=30% }
+![RM_RSBG](RM_imgs/BB_RM_RSBG.png){ width=30% }
+![RM_HBG](RM_imgs/BB_RM_HBG.png){ width=30% }
 
 
 - How do we implement a leaderboard?
