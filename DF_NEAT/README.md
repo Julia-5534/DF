@@ -66,10 +66,11 @@ This project is interpreted/tested on Ubuntu 20.04 LTS using python3
 </p>
 
 <p align="center">
-  <img src="RM_imgs/RM_GL.png" alt="RM_GL" width="5%">
-  <img src="RM_imgs/RM_RSL.png" alt="RM_RSL" width="5%">
-  <img src="RM_imgs/RM_HL.png" alt="RM_HL" width="5%">
+  <img src="RM_imgs/RM_GL.png" alt="RM_GL" width="7%" style="margin-right: 50px">
+  <img src="RM_imgs/RM_RSL.png" alt="RM_RSL" width="7%" style="margin-right: 50px">
+  <img src="RM_imgs/RM_HL.png" alt="RM_HL" width="7%">
 </p>
+
 
 
 
