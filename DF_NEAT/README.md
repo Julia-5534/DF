@@ -1,12 +1,21 @@
 ![Death Farts](RM_imgs/DFLogo.png)
+
 An Utter Masterpiece&trade; By
+
 Julia Bullard <github.com/Julia-5534>
+
 Mason Counts <github.com/spindouken>
+
 This Utter Masterpiece&trade; is a loving homage to the late Flappy Bird mobile app game.
+
 But what if instead of Flappy Bird, we played as DEATH RIDING A SCYTHE?!
+
 And what if instead of wings flapping, it was in fact Death's flatulence propelling you forward?!
+
 AND WHAT IF Death travelled from a Graveyard, through the River Styx, and into the fiery depths of Hell?!
+
 WONDER NO MORE! Death Farts is here to quell all those curiosities!
+
 
 ## :book: Table of Contents :book:
 * [Environment](#environment)
@@ -17,21 +26,25 @@ WONDER NO MORE! Death Farts is here to quell all those curiosities!
 * [Authors](#authors)
 * [License](#license)
 
+
 ## :computer: Environment :computer:
 This project is interpreted/tested on Ubuntu 20.04 LTS using python3
 
-## :video_game: Installation :video_game:
+
+## :cd: Installation :cd:
 * Clone the repository: `git clone https://github.com/Julia-5534/DF.git`
 * Access the Death Farts directory: `cd DF`
 * Run Death Farts: `python3 dftest.py`
 
-## :light_bulb: IPS :light_bulb:
+
+## :bulb: IPS :bulb:
 - What do we use for our "pipes"?
     - Lantern Staff in three different colors, one for each of our three backgrounds.
 ** INSERT PICS OF LANTERNS **
 ![RM_GL](RM_imgs/RM_GL.png)
 ![RM_RSL](RM_imgs/RM_RSL.png)
 ![RM_HL](RM_imgs/RM_HL.png)
+
 
 - How do we implement a seamless side scrolling background?
     - Mirror your image and save it as a separate file.
@@ -43,12 +56,14 @@ This project is interpreted/tested on Ubuntu 20.04 LTS using python3
 ![BB_RM_GBG3](RM_imgs/BB_RM_GBG3.png)
 ![BB_RM_GBG4](RM_imgs/BB_RM_GBG4.png)
 
+
 - How can we easily make our three backgrounds blend together better?
     - Add clouds to the top of the background images to help create a slight illusion of seamless blending
 ** INSERT PICS OF CLOUDED BACKGRONDS **
 ![RM_GBG](RM_imgs/RM_GBG.png)
 ![RM_RSBG](RM_imgs/RM_RSBG.png)
 ![RM_HBG](RM_imgs/RM_HBG.png)
+
 
 - How do we implement a leaderboard?
     -
@@ -73,6 +88,7 @@ This project is interpreted/tested on Ubuntu 20.04 LTS using python3
     - Needed to lower the placement of the fart
         - Makes the fart flow look much more natural
 
+
 ## :robot: Future Functionalities :robot:
 - Super charged fart
 - Make intermediate images so the backgrounds fully transition and blend into each other
@@ -82,12 +98,15 @@ This project is interpreted/tested on Ubuntu 20.04 LTS using python3
 - Have the Main Menu Screen scroll into the actual gameplay
 - Have Death squint, fart, & fly by on the Game Over Screen
 
+
 ## :beetle: Bugs :beetle:
 No known bugs at this time.
 
-## :black_nib: Authors :black_nib:
+
+## :memo: Authors :memo:
 Julia Bullard - [Github](https://github.com/Julia-5534)
 Mason Count - [Github](https://github.com/spindouken) 
+
 
 ## :scroll: License :scroll:
 No touchy! (Insert photo of Llama Cuzco. No, don't. Disney would totally sue.)
