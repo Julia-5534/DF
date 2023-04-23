@@ -38,10 +38,10 @@ This project is interpreted/tested on Ubuntu 20.04 LTS using python3
     - Double the width of your canvas size on your OG image, shift OG image to the left.
     - Place your mirrored image on the right side of the canvas. Voila!
 ** INSERT PICS OF STEPS **
-![RM_GBG1](https://github.com/Julia-5534/DF/DF_NEAT/RM_imgs/RM_GBG1.png)
-![RM_GBG2](https://github.com/Julia-5534/DF/DF_NEAT/RM_imgs/RM_GBG2.png)
-![RM_GBG3](https://github.com/Julia-5534/DF/DF_NEAT/RM_imgs/RM_GBG3.png)
-![RM_GBG4](https://github.com/Julia-5534/DF/DF_NEAT/RM_imgs/RM_GBG4.png)
+![BB_RM_GBG1](https://github.com/Julia-5534/DF/DF_NEAT/RM_imgs/BB_RM_GBG1.png)
+![BB_RM_GBG2](https://github.com/Julia-5534/DF/DF_NEAT/RM_imgs/BB_RM_GBG2.png)
+![BB_RM_GBG3](https://github.com/Julia-5534/DF/DF_NEAT/RM_imgs/BB_RM_GBG3.png)
+![BB_RM_GBG4](https://github.com/Julia-5534/DF/DF_NEAT/RM_imgs/BB_RM_GBG4.png)
 
 - How can we easily make our three backgrounds blend together better?
     - Add clouds to the top of the background images to help create a slight illusion of seamless blending
