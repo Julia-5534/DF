@@ -49,10 +49,14 @@ This project is interpreted/tested on Ubuntu 20.04 LTS using python3
 
 
 <p align="center">
-  <img src="RM_imgs/RM_GL.png" alt="RM_GL" height="5%" style="margin-right: 10px">
-  <img src="RM_imgs/RM_RSL.png" alt="RM_RSL" height="5%" style="margin-right: 10px">
-  <img src="RM_imgs/RM_HL.png" alt="RM_HL" height="5%">
+  <img src="RM_imgs/RM_GL.png" alt="RM_GL" style="max-width: 33%;
+  height: auto; margin-right: 2%">
+  <img src="RM_imgs/RM_RSL.png" alt="RM_RSL" style="max-width: 33%;
+  height: auto; margin-right: 2%">
+  <img src="RM_imgs/RM_HL.png" alt="RM_HL" style="max-width: 33%;
+  height: auto;">
 </p>
+
 
 
 - How do we implement a seamless side scrolling background?
