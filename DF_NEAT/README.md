@@ -47,9 +47,11 @@ This project is interpreted/tested on Ubuntu 20.04 LTS using python3
     - Lantern Staff in three different colors, one for each of our three backgrounds.
 ** INSERT PICS OF LANTERNS **
 
-![RM_GL](RM_imgs/RM_GL.png)
-![RM_RSL](RM_imgs/RM_RSL.png)
-![RM_HL](RM_imgs/RM_HL.png)
+<p align="center">
+  <img src="RM_imgs/RM_GL.png" alt="RM_GL" height="50%">
+  <img src="RM_imgs/RM_RSL.png" alt="RM_RSL" height="50%">
+  <img src="RM_imgs/RM_HL.png" alt="RM_HL" height="50%">
+</p>
 
 
 - How do we implement a seamless side scrolling background?
