@@ -57,10 +57,10 @@ This project is interpreted/tested on Ubuntu 20.04 LTS using python3
 
 
 <p align="center">
-  <img src="RM_imgs/BB_RM_GBG1.png" alt="RM_GBG1" width="15%">
-  <img src="RM_imgs/BB_RM_GBG2.png" alt="RM_GBG2" width="15%">
-  <img src="RM_imgs/BB_RM_GBG3.png" alt="RM_GBG3" width="15%">
-  <img src="RM_imgs/BB_RM_GBG4.png" alt="RM_GBG4" width="15%">
+  <img src="RM_imgs/RM_1.png" alt="RM_1" height="50%">
+  <img src="RM_imgs/RM_2.png" alt="RM_2" height="50%">
+  <img src="RM_imgs/RM_3.png" alt="RM_3" height="50%">
+  <img src="RM_imgs/RM_4.png" alt="RM_4" height="50%">
 </p>
 
 
