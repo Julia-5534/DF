@@ -1,4 +1,6 @@
-![Death Farts](RM_imgs/DFLogo.png)
+<p align="center">
+  <img src="RM_imgs/DFLogo.png" alt="Death Farts">
+</p>
 
 An Utter Masterpiece&trade; By
 
