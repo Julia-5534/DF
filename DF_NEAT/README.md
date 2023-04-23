@@ -45,7 +45,7 @@ This project is interpreted/tested on Ubuntu 20.04 LTS using python3
 
 
 <p align="center">
-  <img src="RM_imgs/3L.png" alt="Three Lanterns">
+  <img src="RM_imgs/3L.png" alt="Three Lanterns" width="50%">
 </p>
 
 
