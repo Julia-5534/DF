@@ -506,13 +506,14 @@ def start_menu():
     while run:
         WIN.blit(menu_image, (x, y))
 
-        button_font = pygame.font.Font("Gypsy Curse.ttf", 75)
-        manual_button = button_font.render("Play Manually", 1, (255, 255, 0))
-        ai_button = button_font.render("Watch  A.I.", 1, (255, 255, 0))
-        leaderboard_button = button_font.render("Leaderboard", 1, (255, 255, 0))
-        WIN.blit(manual_button, (WIN_WIDTH // 2 - manual_button.get_width() // 2, 837))
-        WIN.blit(ai_button, (WIN_WIDTH // 2 - ai_button.get_width() // 2, 974))
-        WIN.blit(leaderboard_button, (WIN_WIDTH // 2 - leaderboard_button.get_width() // 2, 1110))
+        button_font = pygame.font.Font("Gypsy Curse.ttf", 97)
+        ai_font = pygame.font.Font("Open 24 Display St.ttf", 60)
+        manual_button = button_font.render("Start", 1, (255, 255, 0))
+        ai_button = ai_font.render("Watch A.I.", 1, (255, 255, 0))
+        leaderboard_button = ai_font.render("Leaderboard", 1, (255, 255, 0))
+        WIN.blit(manual_button, (WIN_WIDTH // 2 - manual_button.get_width() // 2, 775))
+        WIN.blit(ai_button, (WIN_WIDTH // 2 - ai_button.get_width() // 1, 1100))
+        WIN.blit(leaderboard_button, (WIN_WIDTH // 2 - leaderboard_button.get_width() // 1, 1100))
 
 
         pygame.display.update()
