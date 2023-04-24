@@ -501,14 +501,14 @@ def start_menu():
     while run:
         WIN.blit(menu_image, (x, y))
 
-        button_font = pygame.font.Font("Gypsy Curse.ttf", 97)
-        ai_font = pygame.font.Font("Open 24 Display St.ttf", 60)
+        button_font = pygame.font.Font("Gypsy Curse.ttf", 105)
+        ai_font = pygame.font.Font("Open 24 Display St.ttf", 45)
         manual_button = button_font.render("Start", 1, (247, 250, 0))
         ai_button = ai_font.render("Watch A.I.", 1, (247, 250, 0))
         leaderboard_button = ai_font.render("Leader Board", 1, (247, 250, 0))
-        WIN.blit(manual_button, (WIN_WIDTH // 2 - manual_button.get_width() // 2, 775))
-        WIN.blit(ai_button, (WIN_WIDTH // 2 - ai_button.get_width() // 2, 975))
-        WIN.blit(leaderboard_button, (WIN_WIDTH // 2 - leaderboard_button.get_width() // 2, 975))
+        WIN.blit(manual_button, (WIN_WIDTH // 2 - manual_button.get_width() // 2, 765))
+        WIN.blit(ai_button, (WIN_WIDTH // 2 - ai_button.get_width() // 2 - 220, 975))
+        WIN.blit(leaderboard_button, (WIN_WIDTH // 2 - leaderboard_button.get_width() // 2 + 185, 975))
 
         pygame.display.update()
 
@@ -520,7 +520,7 @@ def start_menu():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
-                if (WIN_WIDTH // 2 - manual_button.get_width() // 2 <= mouse_x <= WIN_WIDTH // 2 + manual_button.get_width() // 2) and (750 <= mouse_y <= 900):
+                if (WIN_WIDTH // 2 - manual_button.get_width() // 2 <= mouse_x <= WIN_WIDTH // 2 + manual_button.get_width() // 2) and (740 <= mouse_y <= 890):
                     run = False
                     manual_play()
                 elif (WIN_WIDTH // 2 - ai_button.get_width() // 2 <= mouse_x <= WIN_WIDTH // 2 + ai_button.get_width() // 2) and (950 <= mouse_y <= 1150):
