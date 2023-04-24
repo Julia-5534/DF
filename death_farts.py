@@ -506,9 +506,14 @@ def start_menu():
         manual_button = button_font.render("Start", 1, (247, 250, 0))
         ai_button = ai_font.render("Watch A.I.", 1, (247, 250, 0))
         leaderboard_button = ai_font.render("Leader Board", 1, (247, 250, 0))
+
+        ai_button_rect = ai_button.get_rect(center=(WIN_WIDTH // 2 - 220, 975 + ai_button.get_height() // 2))
+        leaderboard_button_rect = leaderboard_button.get_rect(center=(WIN_WIDTH // 2 + 185, 975 + leaderboard_button.get_height() // 2))
+
+
         WIN.blit(manual_button, (WIN_WIDTH // 2 - manual_button.get_width() // 2, 765))
-        WIN.blit(ai_button, (WIN_WIDTH // 2 - ai_button.get_width() // 2 - 220, 975))
-        WIN.blit(leaderboard_button, (WIN_WIDTH // 2 - leaderboard_button.get_width() // 2 + 185, 975))
+        WIN.blit(ai_button, ai_button_rect.topleft)
+        WIN.blit(leaderboard_button, leaderboard_button_rect.topleft)
 
         pygame.display.update()
 
@@ -523,14 +528,14 @@ def start_menu():
                 if (WIN_WIDTH // 2 - manual_button.get_width() // 2 <= mouse_x <= WIN_WIDTH // 2 + manual_button.get_width() // 2) and (740 <= mouse_y <= 890):
                     run = False
                     manual_play()
-                elif (WIN_WIDTH // 2 - ai_button.get_width() // 2 <= mouse_x <= WIN_WIDTH // 2 + ai_button.get_width() // 2) and (950 <= mouse_y <= 1150):
+                elif ai_button_rect.collidepoint(mouse_x, mouse_y):
                     run = False
                     local_dir = os.path.dirname(__file__)
                     config_path = os.path.join(local_dir, 'config-feedforward.txt')
                     run_game(config_path)
-                elif (WIN_WIDTH // 2 - leaderboard_button.get_width() // 2 <= mouse_x <= WIN_WIDTH // 2 + leaderboard_button.get_width() // 2) and (1110 <= mouse_y <= 1190):
+                elif leaderboard_button_rect.collidepoint(mouse_x, mouse_y):
                     show_leaderboard()
-                        # Check for the M key press event for manual play
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_TAB:
                     run = False
@@ -671,8 +676,13 @@ def show_leaderboard():
             if len(entry) >= 2:  # Check if entry has at least two items
                 leaderboard.append((entry[0], int(entry[1])))
 
-    leaderboard_font = pygame.font.Font("Gypsy Curse.ttf", 50)
+    leaderboard_font = pygame.font.Font("Open 24 Display St.ttf", 50)
     WIN.fill((0, 0, 0))
+
+    name_heading = leaderboard_font.render("Name", 1, (247, 250, 0))
+    score_heading = leaderboard_font.render("Score", 1, (247, 250, 0))
+    WIN.blit(name_heading, (200, 50))
+    WIN.blit(score_heading, (500, 50))
 
     for index, entry in enumerate(leaderboard[:10]):  # Show top 10 scores
         rank_text = leaderboard_font.render(f"{index + 1}.", 1, (247, 250, 0))
