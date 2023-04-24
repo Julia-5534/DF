@@ -606,19 +606,22 @@ def manual_play():
     print("Game Over!")
 
 class TextInput:
-    def __init__(self, x, y, width, height, font, font_size, color, text=""):
+    def __init__(self, x, y, width, height, font, font_size, color, border_color, border_width=1, text=""):
         self.x = x
         self.y = y
         self.width = width
         self.height = height
+        self.border_color = border_color
+        self.border_width = border_width
         self.font = pygame.font.Font(font, font_size)
         self.color = color
         self.text = text
 
     def draw(self, surface):
-        pygame.draw.rect(surface, self.color, (self.x, self.y, self.width, self.height), 1)
-        text_surface = self.font.render(self.text, True, self.color)
-        surface.blit(text_surface, (self.x + 5, self.y + 5))
+        pygame.draw.rect(surface, self.border_color, (self.x, self.y, self.width, self.height), self.border_width)
+        text_surface = self.get_surface()
+        text_rect = text_surface.get_rect(center=(self.x + self.width // 2, self.y + self.height // 2))
+        surface.blit(text_surface, text_rect)
 
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
@@ -632,6 +635,9 @@ class TextInput:
 
     def get_text(self):
         return self.text
+
+    def get_surface(self):
+        return self.font.render(self.text, True, self.color)
 
 def update_leaderboard(name, score):
     leaderboard_file = "leaderboard.txt"
@@ -696,7 +702,7 @@ def game_over_screen(score):
     Displays the game over screen and waits for 3 seconds before returning to the start menu
     :param score: the final score of the game
     """
-    text_input = TextInput(WIN_WIDTH // 2 - 250, WIN_HEIGHT // 2 + 20, 500, 60, "Open 24 Display St.ttf", 50, (255, 255, 255))
+    text_input = TextInput(WIN_WIDTH // 2 - 250, WIN_HEIGHT // 2 + 20, 500, 60, "Open 24 Display St.ttf", 50, (247, 250, 0), (255, 255, 255), border_width=1)
     enter_name_text = pygame.font.Font("Gypsy Curse.ttf", 70).render("Enter your name:", 1, (255, 255, 255))
 
     clock = pygame.time.Clock()
@@ -738,18 +744,18 @@ def game_over_screen(score):
         WIN.blit(enter_name_text, (WIN_WIDTH // 2 - enter_name_text.get_width() // 2, WIN_HEIGHT // 2 - 100))
         text_input.draw(WIN)
         font = pygame.font.Font("Gypsy Curse.ttf", 120)
-        small_font = pygame.font.Font("Open 24 Display St.ttf", 45)
+        small_font = pygame.font.Font("Open 24 Display St.ttf", 35)
         game_over_text = font.render("Game Over", 1, (247, 250, 0))
         score_text = font.render("Score: " + str(score), 1, (247, 250, 0))
         play_again = pygame.font.Font("Gypsy Curse.ttf", 100).render("Play Again?", 1, (247, 250, 0))
-        press_tab = pygame.font.Font("Open 24 Display St.ttf", 25).render("Press Tab", 1, (255, 255, 255))
-        esc_text = small_font.render("Press ESC to go to Main Menu", 1, (255, 255, 255))
+        press_tab = pygame.font.Font("Open 24 Display St.ttf", 25).render("Press Tab or Alt", 5, (255, 255, 255))
+        esc_text = small_font.render("Press ESC for Main Menu", 1, (255, 255, 255))
 
         WIN.blit(game_over_text, (WIN_WIDTH // 2 - game_over_text.get_width() // 2, WIN_HEIGHT // 2 - game_over_text.get_height() - 340)) # - value to move up from center (y-value)
         WIN.blit(score_text, (WIN_WIDTH // 2 - score_text.get_width() // 2, WIN_HEIGHT // 2 - 340)) # - value to move up from center (y-value)
-        WIN.blit(play_again, (WIN_WIDTH // 2 - play_again.get_width() // 2, WIN_HEIGHT // 2 + 300))
+        WIN.blit(play_again, (WIN_WIDTH // 2 - play_again.get_width() // 2, WIN_HEIGHT // 2 + 150))
         WIN.blit(esc_text, (WIN_WIDTH // 2 - esc_text.get_width() // 2, 1020))
-        WIN.blit(press_tab, (WIN_WIDTH // 2 - esc_text.get_width() // 2 + 300, 1000))
+        WIN.blit(press_tab, (WIN_WIDTH // 2 - esc_text.get_width() // 2 + 100, 850))
 
         pygame.display.update()
 
