@@ -535,6 +535,9 @@ def start_menu():
                 if event.key == pygame.K_TAB:
                     run = False
                     manual_play()
+                if event.key == pygame.K_LALT:
+                    run = False
+                    manual_play()
 
 def manual_play():
     bird = Bird(230, 350)
@@ -726,6 +729,8 @@ def game_over_screen(score):
                 text_input.handle_event(event)
 
                 if event.key == pygame.K_TAB:
+                    manual_play()
+                if event.key == pygame.K_LALT:
                     manual_play()
 
         # Redraw the screen with the updated text input and the "Game Over" text
