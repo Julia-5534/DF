@@ -18,7 +18,7 @@ WIN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
 FLOOR = 1000
 
 pygame.font.init()
-STAT_FONT = pygame.font.Font("Gypsy Curse.ttf", 50)
+STAT_FONT = pygame.font.Font("Open 24 Display St.ttf", 50)
 
 
 # Load images
@@ -325,19 +325,19 @@ def draw_window(win, birds, pipes, base, background, score, gen, pipe_ind, draw_
         bird.draw_farts(win)
         if draw_lines:
             try:
-                pygame.draw.line(win, (255,0,0), (bird.x+bird.img.get_width()/2, bird.y + bird.img.get_height()/2), (pipes[pipe_ind].x + pipes[pipe_ind].PIPE_TOP.get_width()/2, pipes[pipe_ind].height), 5)
-                pygame.draw.line(win, (255,0,0), (bird.x+bird.img.get_width()/2, bird.y + bird.img.get_height()/2), (pipes[pipe_ind].x + pipes[pipe_ind].PIPE_BOTTOM.get_width()/2, pipes[pipe_ind].bottom), 5)
+                pygame.draw.line(win, (191, 31, 24), (bird.x+bird.img.get_width()/2, bird.y + bird.img.get_height()/2), (pipes[pipe_ind].x + pipes[pipe_ind].PIPE_TOP.get_width()/2, pipes[pipe_ind].height), 5)
+                pygame.draw.line(win, (191, 31, 24), (bird.x+bird.img.get_width()/2, bird.y + bird.img.get_height()/2), (pipes[pipe_ind].x + pipes[pipe_ind].PIPE_BOTTOM.get_width()/2, pipes[pipe_ind].bottom), 5)
             except:
                 pass
 
     if show_labels:
-        score_label = STAT_FONT.render("Gens: " + str(gen-1),1,(255,255,255))
+        score_label = STAT_FONT.render("Gens: " + str(gen-1),1,(247, 250, 0))
         win.blit(score_label, (10, 10))
 
-        score_label = STAT_FONT.render("Alive: " + str(len(birds)),1,(255,255,255))
+        score_label = STAT_FONT.render("Alive: " + str(len(birds)),1,(247, 250, 0))
         win.blit(score_label, (10, 50))
 
-    score_label = STAT_FONT.render("Score: " + str(score),1,(255,255,255))
+    score_label = STAT_FONT.render("Score: " + str(score),1,(247, 250, 0))
     win.blit(score_label, (WIN_WIDTH - score_label.get_width() - 15, 10))
 
     pygame.display.update()
@@ -501,14 +501,14 @@ def start_menu():
     while run:
         WIN.blit(menu_image, (x, y))
 
-        button_font = pygame.font.Font("Gypsy Curse.ttf", 75)
-        manual_button = button_font.render("Start", 1, (255, 255, 0))
-        ai_button = button_font.render("Watch  A.I.", 1, (255, 255, 0))
-        leaderboard_button = button_font.render("Leaderboard", 1, (255, 255, 0))
-        WIN.blit(manual_button, (WIN_WIDTH // 2 - manual_button.get_width() // 2, 837))
-        WIN.blit(ai_button, (WIN_WIDTH // 2 - ai_button.get_width() // 2, 974))
-        WIN.blit(leaderboard_button, (WIN_WIDTH // 2 - leaderboard_button.get_width() // 2, 1110))
-
+        button_font = pygame.font.Font("Gypsy Curse.ttf", 97)
+        ai_font = pygame.font.Font("Open 24 Display St.ttf", 60)
+        manual_button = button_font.render("Start", 1, (247, 250, 0))
+        ai_button = ai_font.render("Watch A.I.", 1, (247, 250, 0))
+        leaderboard_button = ai_font.render("Leader Board", 1, (247, 250, 0))
+        WIN.blit(manual_button, (WIN_WIDTH // 2 - manual_button.get_width() // 2, 775))
+        WIN.blit(ai_button, (WIN_WIDTH // 2 - ai_button.get_width() // 2, 975))
+        WIN.blit(leaderboard_button, (WIN_WIDTH // 2 - leaderboard_button.get_width() // 2, 975))
 
         pygame.display.update()
 
@@ -520,10 +520,10 @@ def start_menu():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
-                if (WIN_WIDTH // 2 - manual_button.get_width() // 2 <= mouse_x <= WIN_WIDTH // 2 + manual_button.get_width() // 2) and (870 <= mouse_y <= 950):
+                if (WIN_WIDTH // 2 - manual_button.get_width() // 2 <= mouse_x <= WIN_WIDTH // 2 + manual_button.get_width() // 2) and (750 <= mouse_y <= 900):
                     run = False
                     manual_play()
-                elif (WIN_WIDTH // 2 - ai_button.get_width() // 2 <= mouse_x <= WIN_WIDTH // 2 + ai_button.get_width() // 2) and (1000 <= mouse_y <= 1080):
+                elif (WIN_WIDTH // 2 - ai_button.get_width() // 2 <= mouse_x <= WIN_WIDTH // 2 + ai_button.get_width() // 2) and (950 <= mouse_y <= 1150):
                     run = False
                     local_dir = os.path.dirname(__file__)
                     config_path = os.path.join(local_dir, 'config-feedforward.txt')
@@ -669,9 +669,9 @@ def show_leaderboard():
     WIN.fill((0, 0, 0))
 
     for index, entry in enumerate(leaderboard[:10]):  # Show top 10 scores
-        rank_text = leaderboard_font.render(f"{index + 1}.", 1, (255, 255, 0))
-        name_text = leaderboard_font.render(entry[0], 1, (255, 255, 0))
-        score_text = leaderboard_font.render(str(entry[1]), 1, (255, 255, 0))
+        rank_text = leaderboard_font.render(f"{index + 1}.", 1, (247, 250, 0))
+        name_text = leaderboard_font.render(entry[0], 1, (247, 250, 0))
+        score_text = leaderboard_font.render(str(entry[1]), 1, (247, 250, 0))
 
         y = 100 + index * 60
         WIN.blit(rank_text, (100, y))
@@ -696,7 +696,7 @@ def game_over_screen(score):
     Displays the game over screen and waits for 3 seconds before returning to the start menu
     :param score: the final score of the game
     """
-    text_input = TextInput(WIN_WIDTH // 2 - 250, WIN_HEIGHT // 2 + 20, 500, 60, "Gypsy Curse.ttf", 50, (255, 255, 255))
+    text_input = TextInput(WIN_WIDTH // 2 - 250, WIN_HEIGHT // 2 + 20, 500, 60, "Open 24 Display St.ttf", 50, (255, 255, 255))
     enter_name_text = pygame.font.Font("Gypsy Curse.ttf", 70).render("Enter your name:", 1, (255, 255, 255))
 
     clock = pygame.time.Clock()
@@ -720,7 +720,7 @@ def game_over_screen(score):
                         start_menu()
                     else:
                         # If there was an error updating the leaderboard, display an error message and reset the text input
-                        error_text = pygame.font.Font("Gypsy Curse.ttf", 40).render("Error updating leaderboard. Please try again.", 1, (255, 0, 0))
+                        error_text = pygame.font.Font("Open 24 Display St.ttf", 40).render("Error updating Leader Board. Please try again.", 1, (191, 31, 24))
                         WIN.blit(error_text, (WIN_WIDTH // 2 - error_text.get_width() // 2, WIN_HEIGHT // 2 + 150))
                         pygame.display.update()
                         text_input.text = ""
@@ -738,12 +738,12 @@ def game_over_screen(score):
         WIN.blit(enter_name_text, (WIN_WIDTH // 2 - enter_name_text.get_width() // 2, WIN_HEIGHT // 2 - 100))
         text_input.draw(WIN)
         font = pygame.font.Font("Gypsy Curse.ttf", 120)
-        small_font = pygame.font.Font("Gypsy Curse.ttf", 45)
-        game_over_text = font.render("Game Over", 1, (255, 255, 0))
-        score_text = font.render("Score: " + str(score), 1, (255, 255, 0))
-        play_again = pygame.font.Font("Gypsy Curse.ttf", 100).render("Play Again", 1, (255, 255, 0))
-        press_tab = pygame.font.Font("Open 24 Display St.ttf", 25).render("Press Tab", 1, (255, 255, 0))
-        esc_text = small_font.render("Hit ESC key to return to menu", 1, (255, 255, 255))
+        small_font = pygame.font.Font("Open 24 Display St.ttf", 45)
+        game_over_text = font.render("Game Over", 1, (247, 250, 0))
+        score_text = font.render("Score: " + str(score), 1, (247, 250, 0))
+        play_again = pygame.font.Font("Gypsy Curse.ttf", 100).render("Play Again?", 1, (247, 250, 0))
+        press_tab = pygame.font.Font("Open 24 Display St.ttf", 25).render("Press Tab", 1, (255, 255, 255))
+        esc_text = small_font.render("Press ESC to go to Main Menu", 1, (255, 255, 255))
 
         WIN.blit(game_over_text, (WIN_WIDTH // 2 - game_over_text.get_width() // 2, WIN_HEIGHT // 2 - game_over_text.get_height() - 340)) # - value to move up from center (y-value)
         WIN.blit(score_text, (WIN_WIDTH // 2 - score_text.get_width() // 2, WIN_HEIGHT // 2 - 340)) # - value to move up from center (y-value)
