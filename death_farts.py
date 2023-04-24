@@ -44,7 +44,7 @@ DRAW_LINES = True
 class Bird:
     IMGS = BIRD_IMGS
     MAX_ROTATION = 25
-    ROT_VEL = 2
+    ROT_VEL = 5
     ANIMATION_TIME = 5
 
     def __init__(self, x, y):
@@ -300,7 +300,7 @@ class Background:
         win.blit(self.BG_IMG, (self.x1, 0))
         win.blit(self.BG_IMG, (self.x2, 0))
 
-def draw_window(win, birds, pipes, base, background, score, gen, pipe_ind, draw_lines=True):
+def draw_window(win, birds, pipes, base, background, score, gen, pipe_ind, draw_lines=True, show_labels=True):
     """
     draws the windows for the main game loop
     :param win: pygame window surface
@@ -330,26 +330,21 @@ def draw_window(win, birds, pipes, base, background, score, gen, pipe_ind, draw_
             except:
                 pass
 
+    if show_labels:
+        score_label = STAT_FONT.render("Gens: " + str(gen-1),1,(255,255,255))
+        win.blit(score_label, (10, 10))
+
+        score_label = STAT_FONT.render("Alive: " + str(len(birds)),1,(255,255,255))
+        win.blit(score_label, (10, 50))
+
     score_label = STAT_FONT.render("Score: " + str(score),1,(255,255,255))
     win.blit(score_label, (WIN_WIDTH - score_label.get_width() - 15, 10))
-
-    score_label = STAT_FONT.render("Gens: " + str(gen-1),1,(255,255,255))
-    win.blit(score_label, (10, 10))
-
-    score_label = STAT_FONT.render("Alive: " + str(len(birds)),1,(255,255,255))
-    win.blit(score_label, (10, 50))
 
     pygame.display.update()
 
 def get_current_stage(score):
-    if score < 10:
-        return 1
-    elif score < 20:
-        return 2
-    elif score < 30:
-        return 3
-    else:
-        return 3
+    # edit x  in score // x to change when stage shifts (background and obstacles)
+    return (score // 14) % 3 + 1
 
 def eval_genomes(genomes, config):
     """
@@ -460,7 +455,7 @@ def eval_genomes(genomes, config):
                 ge.pop(birds.index(bird))
                 birds.pop(birds.index(bird))
 
-        draw_window(WIN, birds, pipes, base, background, score, gen, pipe_ind)
+        draw_window(WIN, birds, pipes, base, background, score, gen, pipe_ind, show_labels=True)
 
         # break if score gets large enough
         '''if score > 20:
@@ -507,7 +502,7 @@ def start_menu():
         WIN.blit(menu_image, (x, y))
 
         button_font = pygame.font.Font("Gypsy Curse.ttf", 75)
-        manual_button = button_font.render("Play Manually", 1, (255, 255, 0))
+        manual_button = button_font.render("Start", 1, (255, 255, 0))
         ai_button = button_font.render("Watch  A.I.", 1, (255, 255, 0))
         leaderboard_button = button_font.render("Leaderboard", 1, (255, 255, 0))
         WIN.blit(manual_button, (WIN_WIDTH // 2 - manual_button.get_width() // 2, 837))
@@ -548,7 +543,8 @@ def manual_play():
     stage = get_current_stage(score)
     base = Base(FLOOR, stage)
     background = Background(stage)
-    pipes = [Pipe(WIN_WIDTH, stage)]
+    # delay first pipe: add + int value to WIN_WIDTH to 
+    pipes = [Pipe(WIN_WIDTH + 200, stage)]
 
     clock = pygame.time.Clock()
     win = WIN
@@ -602,7 +598,7 @@ def manual_play():
         if bird.y + bird.img.get_height() - 10 >= FLOOR or bird.y < -50:
             game_over_screen(score)
 
-        draw_window(win, [bird], pipes, base, background, score, 0, 0, draw_lines=False)
+        draw_window(win, [bird], pipes, base, background, score, 0, 0, draw_lines=False, show_labels=False)
 
     print("Game Over!")
 
