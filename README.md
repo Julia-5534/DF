@@ -48,6 +48,20 @@ matplotlib
 * Run Death Farts: `python3 dftest.py`
 
 
+## :video_game: Controls :video_game:
+* `Tab` `Alt` `LMB`
+    * Starts Game from Main Menu
+    * Starts Game from Game Over Screen
+* `Spacebar`
+    * Projects Death into the air
+        * Fast taps move Death higher into the air at a faster pace
+* `Esc`
+    * Stops Gameplay & Directs to Game Over Screen
+    * Directs to Main Menu from Game Over Screen
+* `Enter`
+    * Submits User Name to Leader Board
+
+
 ## :bulb: IPS :bulb:
 - What do we use for our "pipes"?
     - Lantern Staff in three different colors, one for each of our three backgrounds.
