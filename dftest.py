@@ -512,8 +512,8 @@ def start_menu():
         ai_button = ai_font.render("Watch A.I.", 1, (255, 255, 0))
         leaderboard_button = ai_font.render("Leaderboard", 1, (255, 255, 0))
         WIN.blit(manual_button, (WIN_WIDTH // 2 - manual_button.get_width() // 2, 775))
-        WIN.blit(ai_button, (WIN_WIDTH // 2 - ai_button.get_width() // 1, 1100))
-        WIN.blit(leaderboard_button, (WIN_WIDTH // 2 - leaderboard_button.get_width() // 1, 1100))
+        WIN.blit(ai_button, (WIN_WIDTH // 2 - ai_button.get_width() // 2, 1000))
+        WIN.blit(leaderboard_button, (WIN_WIDTH // 2 - leaderboard_button.get_width() // 2, 1000))
 
 
         pygame.display.update()
