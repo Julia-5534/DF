@@ -4,8 +4,8 @@ import os
 import random
 import sys
 import math
-# from pygame_textinput import TextInput
 import requests
+import pickle
 
 
 FPS = 60
@@ -22,12 +22,11 @@ STAT_FONT = pygame.font.Font("Open 24 Display St.ttf", 50)
 
 
 # Load images
-BIRD_IMGS = [pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "dfhalf.png"))),
+DEATH_IMGS = [pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "dfhalf.png"))),
              pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "dfhalf.png"))),
              pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "dfhalf.png")))]
-PIPE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", f"pipeBottom_stage{stage}.png")))
-PIPE_BOTTOM = PIPE_IMG
-#PIPE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "pipe.png")))
+OBSTACLE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", f"obstacleBottom_stage{stage}.png")))
+OBSTACLE_BOTTOM = OBSTACLE_IMG
 BASE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", f"fground_stage{stage}.png")).convert())
 BG_IMG = pygame.image.load(os.path.join("imgs", f"bg_stage{stage}.png")).convert()
 FART_IMGS = [pygame.image.load(os.path.join("imgs", "cloud_2.png")),
@@ -41,8 +40,8 @@ FART_IMGS = [pygame.image.load(os.path.join("imgs", "cloud_2.png")),
 gen = 0  # Initialize the generation counter
 DRAW_LINES = True
 
-class Bird:
-    IMGS = BIRD_IMGS
+class Death:
+    IMGS = DEATH_IMGS
     MAX_ROTATION = 25
     ROT_VEL = 5
     ANIMATION_TIME = 5
@@ -126,16 +125,16 @@ class Bird:
 
         # draw remaining active farts
         for fart in self.active_farts:
-            fart.draw(win)  # pass bird's position to fart's draw method
+            fart.draw(win)  # pass death's position to fart's draw method
 
 class Fart:
-    def __init__(self, bird_x, bird_y, angle):
+    def __init__(self, death_x, death_y, angle):
         angle_deviation = random.uniform(-20, 20) # add random deviation to initial angle of fart (angle of self.angle)
         self.angle = angle + angle_deviation
-        # move x axis of fart closer to death (bird_x - value)
-        self.x = bird_x + 35 * math.cos(math.radians(self.angle))
+        # move x axis of fart closer to death (death_x - value)
+        self.x = death_x + 35 * math.cos(math.radians(self.angle))
         # move y axis of fart closer to death (+ value at end)
-        self.y = bird_y + 20 - 60 * math.sin(math.radians(self.angle)) + 145
+        self.y = death_y + 20 - 60 * math.sin(math.radians(self.angle)) + 145
         self.imgs = []
         for img in FART_IMGS:
             scale = random.uniform(0.6, 1.4)
@@ -204,7 +203,7 @@ class Fart:
         # check if fart has completely faded away
         return self.opacity <= 0
 
-class Pipe:
+class Obstacle:
     #values below are to change obstacle 
     GAP = 370
     VEL = 5
@@ -216,34 +215,34 @@ class Pipe:
         self.gap = 370
         self.top = 0
         self.bottom = 0
-        self.PIPE_BOTTOM = pygame.image.load(os.path.join("imgs", f"pipeBottom_stage{stage}.png")).convert_alpha()
-        self.PIPE_TOP = pygame.transform.flip(self.PIPE_BOTTOM, False, True)
+        self.OBSTACLE_BOTTOM = pygame.image.load(os.path.join("imgs", f"obstacleBottom_stage{stage}.png")).convert_alpha()
+        self.OBSTACLE_TOP = pygame.transform.flip(self.OBSTACLE_BOTTOM, False, True)
         self.passed = False
         self.set_height()
         self.stage = stage
 
     def set_height(self):
         self.height = random.randrange(50, 450)
-        self.top = self.height - self.PIPE_TOP.get_height()
+        self.top = self.height - self.OBSTACLE_TOP.get_height()
         self.bottom = self.height + self.gap
 
     def move(self):
         self.x -= self.VEL
 
     def draw(self, win):
-        win.blit(self.PIPE_TOP, (self.x, self.top))
-        win.blit(self.PIPE_BOTTOM, (self.x, self.bottom))
+        win.blit(self.OBSTACLE_TOP, (self.x, self.top))
+        win.blit(self.OBSTACLE_BOTTOM, (self.x, self.bottom))
 
-    def collide(self, bird):
-        bird_mask = bird.get_mask()
-        top_mask = pygame.mask.from_surface(self.PIPE_TOP)
-        bottom_mask = pygame.mask.from_surface(self.PIPE_BOTTOM)
+    def collide(self, death):
+        death_mask = death.get_mask()
+        top_mask = pygame.mask.from_surface(self.OBSTACLE_TOP)
+        bottom_mask = pygame.mask.from_surface(self.OBSTACLE_BOTTOM)
 
-        top_offset = (self.x - bird.x, self.top - round(bird.y))
-        bottom_offset = (self.x - bird.x, self.bottom - round(bird.y))
+        top_offset = (self.x - death.x, self.top - round(death.y))
+        bottom_offset = (self.x - death.x, self.bottom - round(death.y))
 
-        b_point = bird_mask.overlap(bottom_mask, bottom_offset)
-        t_point = bird_mask.overlap(top_mask, top_offset)
+        b_point = death_mask.overlap(bottom_mask, bottom_offset)
+        t_point = death_mask.overlap(top_mask, top_offset)
 
         if b_point or t_point:
             return True
@@ -300,15 +299,15 @@ class Background:
         win.blit(self.BG_IMG, (self.x1, 0))
         win.blit(self.BG_IMG, (self.x2, 0))
 
-def draw_window(win, birds, pipes, base, background, score, gen, pipe_ind, draw_lines=True, show_labels=True):
+def draw_window(win, deaths, obstacles, base, background, score, gen, obstacle_ind, draw_lines=True, show_labels=True):
     """
     draws the windows for the main game loop
     :param win: pygame window surface
-    :param bird: a Bird object
-    :param pipes: List of pipes
+    :param death: a Death object
+    :param obstacles: List of obstacles
     :param score: score of the game (int)
     :param gen: current generation
-    :param pipe_ind: index of closest pipe
+    :param obstacle_ind: index of closest obstacle
     :return: None
     """
     if gen == 0:
@@ -316,17 +315,17 @@ def draw_window(win, birds, pipes, base, background, score, gen, pipe_ind, draw_
 
     background.draw(win)  # Draw the scrolling background
 
-    for pipe in pipes:
-        pipe.draw(win)
+    for obstacle in obstacles:
+        obstacle.draw(win)
 
     base.draw(win)
-    for bird in birds:
-        bird.draw(win)
-        bird.draw_farts(win)
+    for death in deaths:
+        death.draw(win)
+        death.draw_farts(win)
         if draw_lines:
             try:
-                pygame.draw.line(win, (191, 31, 24), (bird.x+bird.img.get_width()/2, bird.y + bird.img.get_height()/2), (pipes[pipe_ind].x + pipes[pipe_ind].PIPE_TOP.get_width()/2, pipes[pipe_ind].height), 5)
-                pygame.draw.line(win, (191, 31, 24), (bird.x+bird.img.get_width()/2, bird.y + bird.img.get_height()/2), (pipes[pipe_ind].x + pipes[pipe_ind].PIPE_BOTTOM.get_width()/2, pipes[pipe_ind].bottom), 5)
+                pygame.draw.line(win, (191, 31, 24), (death.x+death.img.get_width()/2, death.y + death.img.get_height()/2), (obstacles[obstacle_ind].x + obstacles[obstacle_ind].OBSTACLE_TOP.get_width()/2, obstacles[obstacle_ind].height), 5)
+                pygame.draw.line(win, (191, 31, 24), (death.x+death.img.get_width()/2, death.y + death.img.get_height()/2), (obstacles[obstacle_ind].x + obstacles[obstacle_ind].OBSTACLE_BOTTOM.get_width()/2, obstacles[obstacle_ind].bottom), 5)
             except:
                 pass
 
@@ -334,7 +333,7 @@ def draw_window(win, birds, pipes, base, background, score, gen, pipe_ind, draw_
         score_label = STAT_FONT.render("Gens: " + str(gen-1),1,(247, 250, 0))
         win.blit(score_label, (10, 10))
 
-        score_label = STAT_FONT.render("Alive: " + str(len(birds)),1,(247, 250, 0))
+        score_label = STAT_FONT.render("Alive: " + str(len(deaths)),1,(247, 250, 0))
         win.blit(score_label, (10, 50))
 
     score_label = STAT_FONT.render("Score: " + str(score),1,(247, 250, 0))
@@ -346,11 +345,11 @@ def get_current_stage(score):
     # edit x  in score // x to change when stage shifts (background and obstacles)
     return (score // 14) % 3 + 1
 
-def eval_genomes(genomes, config):
+def run_simulation(genomes, config):
     """
-    runs the simulation of the current population of
-    birds and sets their fitness based on the distance they
-    reach in the game.
+    runs a simulation of the current population of
+    deaths and sets their fitness based on the 
+    distance they reach in the game.
     """
     global WIN, gen
     win = WIN
@@ -358,28 +357,28 @@ def eval_genomes(genomes, config):
 
     # start by creating lists holding the genome itself, the
     # neural network associated with the genome and the
-    # bird object that uses that network to play
+    # death object that uses that network to play
     nets = []
-    birds = []
+    deaths = []
     ge = []
     for genome_id, genome in genomes:
         genome.fitness = 0  # start with fitness level of 0
         net = neat.nn.FeedForwardNetwork.create(genome, config)
         nets.append(net)
-        birds.append(Bird(230,350))
+        deaths.append(Death(230,350))
         ge.append(genome)
 
     score = 0
     stage = get_current_stage(score)
     base = Base(FLOOR, stage)
     background = Background(stage)
-    pipes = [Pipe(WIN_WIDTH, stage)]
+    obstacles = [Obstacle(WIN_WIDTH, stage)]
 
 	# Create a clock object before the game loop begins
     clock = pygame.time.Clock()
 
     run = True
-    while run and len(birds) > 0:
+    while run and len(deaths) > 0:
         clock.tick(60) # set fps
 
         for event in pygame.event.get():
@@ -392,50 +391,47 @@ def eval_genomes(genomes, config):
                 start_menu()
                 break
 
-        pipe_ind = 0
-        if len(birds) > 0:
-            if len(pipes) > 1 and birds[0].x > pipes[0].x + pipes[0].PIPE_TOP.get_width():  # determine whether to use the first or second
-                pipe_ind = 1                                                                 # pipe on the screen for neural network input
+        obstacle_ind = 0
+        if len(deaths) > 0:
+            if len(obstacles) > 1 and deaths[0].x > obstacles[0].x + obstacles[0].OBSTACLE_TOP.get_width():  # determine whether to use the first or second
+                obstacle_ind = 1                                                                 # obstacle on the screen for neural network input
 
-        for x, bird in enumerate(birds):  # give each bird a fitness of 0.1 for each frame it stays alive
+        for x, death in enumerate(deaths):  # give each death a fitness of 0.1 for each frame it stays alive
             ge[x].fitness += 0.1
-            bird.move()
+            death.move()
 
-            # send bird location, top pipe location and bottom pipe location and determine from network whether to jump or not
-            output = nets[birds.index(bird)].activate((bird.y, abs(bird.y - pipes[pipe_ind].height), abs(bird.y - pipes[pipe_ind].bottom)))
-
-            # 3. farts - Pass delta_time to the bird's draw method
-            #bird.draw(WIN, delta_time)
+            # send death location, top obstacle location and bottom obstacle location and determine from network whether to jump or not
+            output = nets[deaths.index(death)].activate((death.y, abs(death.y - obstacles[obstacle_ind].height), abs(death.y - obstacles[obstacle_ind].bottom)))
 
             if output[0] > 0.5:  # we use a tanh activation function so result will be between -1 and 1. if over 0.5 jump
-                bird.jump()
+                death.jump()
 
 
         base.move()
         background.move() # Update the scrolling background
 
         rem = []
-        add_pipe = False
-        for pipe in pipes:
-            pipe.move()
+        add_obstacle = False
+        for obstacle in obstacles:
+            obstacle.move()
             # check for collision
-            for bird in birds:
-                if pipe.collide(bird):
-                    ge[birds.index(bird)].fitness -= 1
-                    nets.pop(birds.index(bird))
-                    ge.pop(birds.index(bird))
-                    birds.pop(birds.index(bird))
+            for death in deaths:
+                if obstacle.collide(death):
+                    ge[deaths.index(death)].fitness -= 1
+                    nets.pop(deaths.index(death))
+                    ge.pop(deaths.index(death))
+                    deaths.pop(deaths.index(death))
 
-            if pipe.x + pipe.PIPE_TOP.get_width() < 0:
-                rem.append(pipe)
+            if obstacle.x + obstacle.OBSTACLE_TOP.get_width() < 0:
+                rem.append(obstacle)
 
-            if not pipe.passed and pipe.x < bird.x:
-                pipe.passed = True
-                add_pipe = True
+            if not obstacle.passed and obstacle.x < death.x:
+                obstacle.passed = True
+                add_obstacle = True
 
-        if add_pipe:
+        if add_obstacle:
             score += 1
-            # can add this line to give more reward for passing through a pipe (not required)
+            # can add this line to give more reward for passing through a obstacle (not required)
             for genome in ge:
                 genome.fitness += 5
 
@@ -444,28 +440,32 @@ def eval_genomes(genomes, config):
                 stage = new_stage
                 background = Background(stage)
 
-            pipes.append(Pipe(WIN_WIDTH, stage))
+            obstacles.append(Obstacle(WIN_WIDTH, stage))
 
         for r in rem:
-            pipes.remove(r)
+            obstacles.remove(r)
 
-        for bird in birds:
-            if bird.y + bird.img.get_height() - 10 >= FLOOR or bird.y < -50:
-                nets.pop(birds.index(bird))
-                ge.pop(birds.index(bird))
-                birds.pop(birds.index(bird))
+        for death in deaths:
+            if death.y + death.img.get_height() - 10 >= FLOOR or death.y < -50:
+                nets.pop(deaths.index(death))
+                ge.pop(deaths.index(death))
+                deaths.pop(deaths.index(death))
 
-        draw_window(WIN, birds, pipes, base, background, score, gen, pipe_ind, show_labels=True)
+        draw_window(WIN, deaths, obstacles, base, background, score, gen, obstacle_ind, show_labels=True)
 
         # break if score gets large enough
-        '''if score > 20:
-            pickle.dump(nets[0],open("best.pickle", "wb"))
-            break'''
+        if len(ge) > 0:  # Only proceed if the ge list is not empty
+            best_index = ge.index(max(ge, key=lambda x: x.fitness))
+
+            # break if score gets large enough
+            if score > 50:
+                pickle.dump(nets[best_index], open("best.pickle", "wb"))
+                break
 
 
 def run_game(config_file):
     """
-    runs the NEAT algorithm to train a neural network to play flappy bird.
+    runs the NEAT algorithm to train a neural network to play flappy death.
     :param config_file: location of config file
     :return: None
     """
@@ -483,7 +483,7 @@ def run_game(config_file):
     #p.add_reporter(neat.Checkpointer(5))
 
     # Run for up to 50 generations.
-    winner = p.run(eval_genomes, 50)
+    winner = p.run(run_simulation, 50)
 
     # show final stats
     print('\nBest genome:\n{!s}'.format(winner))
@@ -545,14 +545,14 @@ def start_menu():
                     manual_play()
 
 def manual_play():
-    bird = Bird(230, 350)
+    death = Death(230, 350)
     score = 0
 
     stage = get_current_stage(score)
     base = Base(FLOOR, stage)
     background = Background(stage)
-    # delay first pipe: add + int value to WIN_WIDTH to 
-    pipes = [Pipe(WIN_WIDTH + 200, stage)]
+    # delay first obstacle: add + int value to WIN_WIDTH to 
+    obstacles = [Obstacle(WIN_WIDTH + 200, stage)]
 
     clock = pygame.time.Clock()
     win = WIN
@@ -567,33 +567,33 @@ def manual_play():
                 sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                        bird.jump()
-                        bird.fart()
+                        death.jump()
+                        death.fart()
                 elif event.key == pygame.K_ESCAPE:
                     running = False
                     game_over_screen(score)
 
-        bird.move()
+        death.move()
         base.move()
         background.move()
 
         rem = []
-        add_pipe = False
-        for pipe in pipes:
-            pipe.move()
-            if pipe.collide(bird):
+        add_obstacle = False
+        for obstacle in obstacles:
+            obstacle.move()
+            if obstacle.collide(death):
                 game_over_screen(score)
 
-            if pipe.x + pipe.PIPE_TOP.get_width() < 0:
-                rem.append(pipe)
+            if obstacle.x + obstacle.OBSTACLE_TOP.get_width() < 0:
+                rem.append(obstacle)
 
-            if not pipe.passed and pipe.x < bird.x:
-                pipe.passed = True
-                add_pipe = True
+            if not obstacle.passed and obstacle.x < death.x:
+                obstacle.passed = True
+                add_obstacle = True
 
-        if add_pipe:
+        if add_obstacle:
             score += 1
-            pipes.append(Pipe(WIN_WIDTH, stage))
+            obstacles.append(Obstacle(WIN_WIDTH, stage))
 
             new_stage = get_current_stage(score)
             if new_stage != stage:
@@ -601,12 +601,12 @@ def manual_play():
                 background = Background(stage)
 
         for r in rem:
-            pipes.remove(r)
+            obstacles.remove(r)
 
-        if bird.y + bird.img.get_height() - 10 >= FLOOR or bird.y < -50:
+        if death.y + death.img.get_height() - 10 >= FLOOR or death.y < -50:
             game_over_screen(score)
 
-        draw_window(win, [bird], pipes, base, background, score, 0, 0, draw_lines=False, show_labels=False)
+        draw_window(win, [death], obstacles, base, background, score, 0, 0, draw_lines=False, show_labels=False)
 
     print("Game Over!")
 
@@ -681,7 +681,7 @@ def show_leaderboard():
 
     name_heading = leaderboard_font.render("Name", 1, (247, 250, 0))
     score_heading = leaderboard_font.render("Score", 1, (247, 250, 0))
-    WIN.blit(name_heading, (200, 50))
+    WIN.blit(name_heading, (25, 50))
     WIN.blit(score_heading, (500, 50))
 
     for index, entry in enumerate(leaderboard[:10]):  # Show top 10 scores
@@ -690,8 +690,8 @@ def show_leaderboard():
         score_text = leaderboard_font.render(str(entry[1]), 1, (247, 250, 0))
 
         y = 100 + index * 60
-        WIN.blit(rank_text, (100, y))
-        WIN.blit(name_text, (200, y))
+        WIN.blit(rank_text, (25, y))
+        WIN.blit(name_text, (75, y))
         WIN.blit(score_text, (500, y))
 
     pygame.display.update()
