@@ -18,11 +18,6 @@ WONDER NO MORE! Death Farts is here to quell all those curiosities!
 </p>
 
 
-<p align="center">
-  <img src="RM_imgs/fground_stage1.png" alt="fground">
-</p>
-
-
 ## :book: Table of Contents :book:
 * [Environment](#environment)
 * [Requirements](#requirements)
@@ -34,18 +29,8 @@ WONDER NO MORE! Death Farts is here to quell all those curiosities!
 * [License](#license)
 
 
-<p align="center">
-  <img src="RM_imgs/fground_stage1.png" alt="fground">
-</p>
-
-
 ## :computer: Environment :computer:
 * This project is interpreted/tested on Ubuntu 20.04 LTS using python3
-
-
-<p align="center">
-  <img src="RM_imgs/fground_stage1.png" alt="fground">
-</p>
 
 
 ## :white_check_mark: Requirements :white_check_mark:
@@ -56,20 +41,10 @@ WONDER NO MORE! Death Farts is here to quell all those curiosities!
 * matplotlib
 
 
-<p align="center">
-  <img src="RM_imgs/fground_stage1.png" alt="fground">
-</p>
-
-
 ## :cd: Installation :cd:
 * Clone the repository: `git clone https://github.com/Julia-5534/DF.git`
 * Access the Death Farts directory: `cd DF`
 * Run Death Farts: `python3 dftest.py`
-
-
-<p align="center">
-  <img src="RM_imgs/fground_stage1.png" alt="fground">
-</p>
   
 
 ## :video_game: Controls :video_game:
@@ -85,11 +60,6 @@ WONDER NO MORE! Death Farts is here to quell all those curiosities!
     * Directs to Main Menu from Game Over Screen
 * `Enter`
     * Submits User Name to Leader Board
-
-
-<p align="center">
-  <img src="RM_imgs/fground_stage1.png" alt="fground">
-</p>
 
 
 ## :bulb: IPS :bulb:
@@ -175,11 +145,6 @@ WONDER NO MORE! Death Farts is here to quell all those curiosities!
 </p>
 
 
-<p align="center">
-  <img src="RM_imgs/fground_stage1.png" alt="fground">
-</p>
-
-
 ## :robot: Future Functionalities :robot:
 - Super charged fart
 - Make intermediate images so the backgrounds fully transition and blend into each other
@@ -190,28 +155,13 @@ WONDER NO MORE! Death Farts is here to quell all those curiosities!
 - Have Death squint, fart, & fly by on the Game Over Screen
 
 
-<p align="center">
-  <img src="RM_imgs/fground_stage1.png" alt="fground">
-</p>
-
-
 ## :beetle: Bugs :beetle:
 - No known bugs at this time.
-
-
-<p align="center">
-  <img src="RM_imgs/fground_stage1.png" alt="fground">
-</p>
 
 
 ## :memo: Authors :memo:
 - Julia Bullard - [Github](https://github.com/Julia-5534)
 - Mason Counts - [Github](https://github.com/spindouken) 
-
-
-<p align="center">
-  <img src="RM_imgs/fground_stage1.png" alt="fground">
-</p>
 
 
 ## :scroll: License :scroll:
