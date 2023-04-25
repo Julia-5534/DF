@@ -7,6 +7,8 @@
 <br>An Utter Masterpiece&trade; By</br>
 Julia Bullard <github.com/Julia-5534> & Mason Counts <github.com/spindouken>
 </p>
+
+
 <p align="justify">
 <br>This Utter Masterpiece&trade; is a loving homage to the late Flappy Bird mobile app game..................</br>
 But what if instead of Flappy Bird, we played as DEATH RIDING A SCYTHE?!
@@ -14,6 +16,12 @@ And what if instead of wings flapping, it was Death's flatulence propelling you 
 WHAT IF Death travelled from a Graveyard, through the River Styx, and into the fiery depths of Hell?!?!
 WONDER NO MORE! Death Farts is here to quell all those curiosities!
 </p>
+
+
+<p align="center">
+  <img src="RM_imgs/fground_stage1.png" alt="fground">
+</p>
+
 
 ## :book: Table of Contents :book:
 * [Environment](#environment)
@@ -26,8 +34,18 @@ WONDER NO MORE! Death Farts is here to quell all those curiosities!
 * [License](#license)
 
 
+<p align="center">
+  <img src="RM_imgs/fground_stage1.png" alt="fground">
+</p>
+
+
 ## :computer: Environment :computer:
 * This project is interpreted/tested on Ubuntu 20.04 LTS using python3
+
+
+<p align="center">
+  <img src="RM_imgs/fground_stage1.png" alt="fground">
+</p>
 
 
 ## :white_check_mark: Requirements :white_check_mark:
@@ -38,11 +56,21 @@ WONDER NO MORE! Death Farts is here to quell all those curiosities!
 * matplotlib
 
 
+<p align="center">
+  <img src="RM_imgs/fground_stage1.png" alt="fground">
+</p>
+
+
 ## :cd: Installation :cd:
 * Clone the repository: `git clone https://github.com/Julia-5534/DF.git`
 * Access the Death Farts directory: `cd DF`
 * Run Death Farts: `python3 dftest.py`
 
+
+<p align="center">
+  <img src="RM_imgs/fground_stage1.png" alt="fground">
+</p>
+  
 
 ## :video_game: Controls :video_game:
 * `LMB`
@@ -59,9 +87,14 @@ WONDER NO MORE! Death Farts is here to quell all those curiosities!
     * Submits User Name to Leader Board
 
 
+<p align="center">
+  <img src="RM_imgs/fground_stage1.png" alt="fground">
+</p>
+
+
 ## :bulb: IPS :bulb:
-- What do we use for our "pipes"?
-    - Lantern Staff in three different colors, one for each of our three backgrounds.
+- What do we use for our obstacles?
+    - Lantern Staff in three different colors, one for each of our backgrounds.
 
 
 <p align="center">
@@ -73,7 +106,6 @@ WONDER NO MORE! Death Farts is here to quell all those curiosities!
     - Mirror your image and save it as a separate file.
     - Double the width of your canvas size on your OG image, shift OG image to the left.
     - Place your mirrored image on the right side of the canvas. Voila!
-** INSERT PICS OF STEPS **
 
 
 <p align="center">
@@ -84,7 +116,7 @@ WONDER NO MORE! Death Farts is here to quell all those curiosities!
 
 
 - How can we easily make our three backgrounds blend together better?
-    - Add clouds to the top of the background images to help create a slight illusion of seamless blending
+    - Add clouds to the top of each background image to help create an illusion of seamless blending
 
 
 <p align="center">
@@ -94,8 +126,8 @@ WONDER NO MORE! Death Farts is here to quell all those curiosities!
 </p>
 
 
-- How do we implement a leaderboard?
-    - Put Masons steps in here
+- How do we implement a Leader Board?
+    - Put Mason's steps in here
 
 
 <p align="center">
@@ -105,8 +137,10 @@ WONDER NO MORE! Death Farts is here to quell all those curiosities!
 
 
 - How do we delay the obstacles in the beginning so you don't immediately crash?
-    - Add a function to the game screen where you have to tap once for the game to start.
-** INSERT GIFS OF GAME WITH NO TAP & GAME WITH TAP **
+    - Add a function to the gameplay screen
+    - Have to tap once on `Spacebar` for the game to start.
+
+
 - How do we implement the farts?!
     - Use the same image but in three different colors, one for each background.
     - Use pygame.transform.scale() & pygame.Surface
@@ -118,15 +152,16 @@ WONDER NO MORE! Death Farts is here to quell all those curiosities!
 </p>
 
 
-
 - Why does the game look like everything's moving weird?
     - The base and lanterns need to move at the same speed. No more motion sickness!
-** INSERT GIF OF SHITTY VELOCITY **
+
+
 - Why does tapping on the Game Over Screen register on the Main Menu Screen?
     - Need to clear the input buffer
     - Use pygame.event.clear()
-        - Taps no longer register on the Game Over Screen
-** INSERT GIFS OF GAME OVER SCREEN WITH NO CLEARED BUFFER & WITH CLEARED BUFFER **
+        - `LMB` no longer registers on the Game Over Screen
+
+
 - Why does the fart placement look a little off?
     - Needed to lower the placement of the fart
         - Makes the fart flow look much more natural
@@ -140,6 +175,11 @@ WONDER NO MORE! Death Farts is here to quell all those curiosities!
 </p>
 
 
+<p align="center">
+  <img src="RM_imgs/fground_stage1.png" alt="fground">
+</p>
+
+
 ## :robot: Future Functionalities :robot:
 - Super charged fart
 - Make intermediate images so the backgrounds fully transition and blend into each other
@@ -150,13 +190,28 @@ WONDER NO MORE! Death Farts is here to quell all those curiosities!
 - Have Death squint, fart, & fly by on the Game Over Screen
 
 
+<p align="center">
+  <img src="RM_imgs/fground_stage1.png" alt="fground">
+</p>
+
+
 ## :beetle: Bugs :beetle:
 - No known bugs at this time.
+
+
+<p align="center">
+  <img src="RM_imgs/fground_stage1.png" alt="fground">
+</p>
 
 
 ## :memo: Authors :memo:
 - Julia Bullard - [Github](https://github.com/Julia-5534)
 - Mason Counts - [Github](https://github.com/spindouken) 
+
+
+<p align="center">
+  <img src="RM_imgs/fground_stage1.png" alt="fground">
+</p>
 
 
 ## :scroll: License :scroll:
