@@ -485,7 +485,7 @@ def run_simulation(genomes, config):
             best_index = ge.index(max(ge, key=lambda x: x.fitness))
 
             # save the best network if the score is greater than 50
-            if score > 50:
+            if score > 10:
                 pickle.dump(nets[best_index], open("best.pickle", "wb"))
                 break
 
@@ -509,12 +509,67 @@ def run_game(config_file):
     #p.add_reporter(neat.Checkpointer(5))
 
     # Run for up to 50 generations.
-    winner = p.run(run_simulation, 50)
+    winner = p.run(run_simulation, 3)
+
+    # Calculate additional stats
+    num_generations = len(stats.most_fit_genomes)
+    num_genomes_evaluated = sum(stats.get_fitness_mean())
+    avg_fitness_per_generation = [round(f, 2) for f in stats.get_fitness_mean()]
+    best_fitness_per_generation = [round(f.fitness, 2) for f in stats.most_fit_genomes]
+
+    # Get the species ID of the winner
+    winner_species_id = None
+    for species_id, species in p.species.species.items():
+        if winner.key in species.members:
+            winner_species_id = species_id
+            break
+
+    display_genome_info(WIN, winner, config, num_generations, num_genomes_evaluated, avg_fitness_per_generation, best_fitness_per_generation, winner_species_id)
 
     # show final stats
     print('\nBest genome:\n{!s}'.format(winner))
 
+def display_genome_info(win, winner, config, num_generations, num_genomes_evaluated, avg_fitness_per_generation, best_fitness_per_generation, winner_species_id):
+    font = pygame.font.Font("Open 24 Display St.ttf", 30)
+    title_font = pygame.font.Font(pygame.font.get_default_font(), 45)
 
+    title = title_font.render("Best Genome Information", True, (255, 255, 255))
+    genome_id = font.render("Genome ID: {}".format(winner.key), True, (255, 255, 255))
+    genome_fitness = font.render("Fitness: {:.2f}".format(winner.fitness), True, (255, 255, 255))
+    connections = font.render("Connections: {}".format(len(winner.connections)), True, (255, 255, 255))
+    nodes = font.render("Nodes: {}".format(len(winner.nodes)), True, (255, 255, 255))
+    species = font.render("Species: {}".format(winner_species_id), True, (255, 255, 255))
+    generations = font.render("Generations: {}".format(num_generations), True, (255, 255, 255))
+    genomes_evaluated = font.render("Genomes Evaluated: {}".format(num_genomes_evaluated), True, (255, 255, 255))
+    avg_fitness = font.render("Average Fitness per Generation: {}".format(", ".join(map(str, avg_fitness_per_generation))), True, (255, 255, 255))
+    best_fitness = font.render("Best Fitness per Generation: {}".format(", ".join(map(str, best_fitness_per_generation))), True, (255, 255, 255))
+    enabled_connections = sum(1 for cg in winner.connections.values() if cg.enabled)
+    enabled_connections_text = font.render("Enabled Connections: {}".format(enabled_connections), True, (255, 255, 255))
+
+    instructions = font.render("Press ESC to return", True, (255, 255, 255))
+
+    win.fill((0, 0, 0))  # Clear the window
+    win.blit(title, (10, 10))
+    win.blit(genome_id, (10, 50))
+    win.blit(genome_fitness, (10, 80))
+    win.blit(connections, (10, 110))
+    win.blit(nodes, (10, 140))
+    win.blit(species, (10, 170))
+    win.blit(enabled_connections_text, (10, 200))
+    win.blit(generations, (10, 230))
+    win.blit(genomes_evaluated, (10, 260))
+    win.blit(avg_fitness, (10, 290))
+    win.blit(best_fitness, (10, 320))
+    win.blit(instructions, (10, 370))
+
+    # Update the display
+    pygame.display.update()
+
+    # Wait for the user to press the escape key
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                start_menu()
 
 def start_menu():
     menu_image = pygame.image.load(os.path.join("imgs", "DFMenuFinal.png"))    
