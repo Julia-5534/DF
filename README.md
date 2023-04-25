@@ -31,15 +31,15 @@ WONDER NO MORE! Death Farts is here to quell all those curiosities!
 
 
 ## :computer: Environment :computer:
-This project is interpreted/tested on Ubuntu 20.04 LTS using python3
+* This project is interpreted/tested on Ubuntu 20.04 LTS using python3
 
 
 ## Requirements
-pygame
-numpy
-neat-python
-graphviz
-matplotlib
+* pygame
+* numpy
+* neat-python
+* graphviz
+* matplotlib
 
 
 ## :cd: Installation :cd:
@@ -117,13 +117,9 @@ matplotlib
 
 
 <p align="center">
-  <img src="RM_imgs/GFCloud.png" alt="GFCloud" width="25%">
-  <img src="RM_imgs/GFCloud.png" alt="GFCloud" width="15%">
-  <img src="RM_imgs/GFCloud.png" alt="GFCloud" width="10%">
-  <img src="RM_imgs/YFCloud.png" alt="YFCloud" width="25%">
-  <img src="RM_imgs/YFCloud.png" alt="YFCloud" width="15%">
-  <img src="RM_imgs/YFCloud.png" alt="YFCloud" width="10%">
+  <img src="RM_imgs/RM_imgFART.png" alt="RM_imgFART">
 </p>
+
 
 
 - Why does the game look like everything's moving weird?
@@ -140,7 +136,10 @@ matplotlib
 
 
 <p align="center">
-  <img src="RM_imgs/RM_imgFART.png" alt="RM_imgFART">
+  <img src="RM_imgs/RM_imgFD1.png" alt="RM_imgFD1" width="35%">
+  <img src="RM_imgs/RM_imgOFDO1.png" alt="RM_imgOFDO1" width="35%">
+  <img src="RM_imgs/RM_imgFD2.png" alt="RM_imgFD2" width="35%">
+  <img src="RM_imgs/RM_imgOFD2.png" alt="RM_imgOFD2" width="35%">
 </p>
 
 
