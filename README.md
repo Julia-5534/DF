@@ -101,10 +101,6 @@ WONDER NO MORE! Death Farts is here to quell all those curiosities!
 </p>
 
 
-- How do we implement a Leader Board?
-    - Put Mason's steps in here
-
-
 <p align="center">
   <img src="RM_imgs/RM_imgLB1.png" alt="LB1" width="30%">
   <img src="RM_imgs/RM_imgLB2.png" alt="LB2" width="30%">
