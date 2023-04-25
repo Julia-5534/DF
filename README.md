@@ -128,6 +128,14 @@ matplotlib
         - Makes the fart flow look much more natural
 
 
+<p align="center">
+  <img src="RM_imgs/RM_imgFD1.png" alt="RM_GBG" width="35%">
+  <img src="RM_imgs/RM_imgOFDO1.png" alt="RM_RSBG" width="35%">
+  <img src="RM_imgs/RM_imgFD2.png" alt="RM_HBG" width="35%">
+  <img src="RM_imgs/RM_imgOFD2.png" alt="RM_HBG" width="35%">
+</p>
+
+
 ## :robot: Future Functionalities :robot:
 - Super charged fart
 - Make intermediate images so the backgrounds fully transition and blend into each other
