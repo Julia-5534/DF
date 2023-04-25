@@ -100,6 +100,9 @@ WONDER NO MORE! Death Farts is here to quell all those curiosities!
   <img src="RM_imgs/BB_RM_HBG.png" alt="RM_HBG" width="30%">
 </p>
 
+- How do we implement a Leader Board?
+    - Use a .txt file for local machine scorekeeping.
+
 
 <p align="center">
   <img src="RM_imgs/RM_imgLB1.png" alt="LB1" width="30%">
