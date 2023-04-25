@@ -128,8 +128,10 @@ class Death:
             fart.draw(win)  # pass death's position to fart's draw method
 
 class Fart:
+    """Defines the Fart Clouds that Death emits from his booty"""
     def __init__(self, death_x, death_y, angle):
-        angle_deviation = random.uniform(-20, 20) # add random deviation to initial angle of fart (angle of self.angle)
+        # add random deviation to initial angle of fart (angle of self.angle)
+        angle_deviation = random.uniform(-20, 20) 
         self.angle = angle + angle_deviation
         # move x axis of fart closer to death (death_x - value)
         self.x = death_x + 35 * math.cos(math.radians(self.angle))
@@ -138,21 +140,23 @@ class Fart:
         self.imgs = []
         for img in FART_IMGS:
             scale = random.uniform(0.6, 1.4)
-            scaled_img = pygame.transform.scale(img, (int(img.get_width() * scale), int(img.get_height() * scale)))
+            scaled_img = pygame.transform.scale(img,
+            (int(img.get_width() * scale), int(img.get_height() * scale)))
             self.imgs.append(scaled_img)
         self.img_count = 0
         self.img = self.imgs[0]
         self.timer = 0  # initialize timer to 0
         self.fade_time = 2.0  # time for fart to fade out
         self.opacity = 1.0  # initialize opacity to 100%
-        self.initial_size = 50  # Set the initial size of the fart image
-        self.current_size = self.initial_size  # Store the current size of the fart image
-        self.size_increase_rate = 50  # Set the rate at which the size increases
+        self.initial_size = 50  # Sets initial size of fart image
+        self.current_size = self.initial_size  # Stores current size of fart image
+        self.size_increase_rate = 50  # Sets size increase rate
 
         # calculate fart launch speed with random factor
         launch_speed = random.uniform(-10.0, -50.0)
 
-        # calculate horizontal and vertical components of velocity based on angle and launch speed with random components
+        # calculate horizontal and vertical components of velocity
+        # based on angle and launch speed with random components
         angle_rad = math.radians(self.angle)
         self.vx = launch_speed * math.cos(angle_rad) + random.uniform(-1, 1)
         self.vy = -launch_speed * math.sin(angle_rad) + random.uniform(-1, 1)
@@ -166,7 +170,8 @@ class Fart:
         self.y += self.vy * dt
 
         # add random drift to velocity
-        self.vx += random.uniform(-20, 0) # second value as 0 means fart will not fly into face ;]
+        self.vx += random.uniform(-20, 0)
+        # second value as 0 means fart will not fly into face ;]
         self.vy += random.uniform(-40, 40)
 
         # update opacity based on time elapsed
@@ -178,7 +183,8 @@ class Fart:
         self.current_size += self.size_increase_rate / FPS
 
         # Scale the image based on the current size and set the alpha value
-        scaled_img = pygame.transform.scale(self.img, (int(self.current_size), int(self.current_size)))
+        scaled_img = pygame.transform.scale(self.img,
+        (int(self.current_size), int(self.current_size)))
         alpha = int(255 * self.opacity)
         rotated_img = pygame.transform.rotate(scaled_img, self.angle)
         rotated_img.set_alpha(alpha)
@@ -279,7 +285,8 @@ class Background:
 
     def __init__(self, stage):
         self.stage = stage
-        self.BG_IMG = pygame.image.load(os.path.join("imgs", f"bg_stage{stage}.png")).convert()
+        self.BG_IMG = pygame.image.load(os.path.join("imgs",
+        f"bg_stage{stage}.png")).convert()
         self.WIDTH = self.BG_IMG.get_width()
         self.HEIGHT = self.BG_IMG.get_height()
         self.x1 = 0
@@ -342,32 +349,36 @@ def draw_window(win, deaths, obstacles, base, background, score, gen, obstacle_i
     pygame.display.update()
 
 def get_current_stage(score):
-    # edit x  in score // x to change when stage shifts (background and obstacles)
+    # edit x in score // x to change when stage shifts (background & obstacles)
     return (score // 14) % 3 + 1
 
 def run_simulation(genomes, config):
     """
     runs a simulation of the current population of
     deaths and sets their fitness based on the 
-    distance they reach in the game.
+    distance they reach in the game
     """
     global WIN, gen
     win = WIN
     gen += 1
 
-    # start by creating lists holding the genome itself, the
+    # creates lists holding the genome, the
     # neural network associated with the genome and the
     # death object that uses that network to play
     nets = []
     deaths = []
     ge = []
     for genome_id, genome in genomes:
-        genome.fitness = 0  # start with fitness level of 0
+        # reset/set fitness to zero
+        genome.fitness = 0
         net = neat.nn.FeedForwardNetwork.create(genome, config)
+        # create a neural network for each genome
         nets.append(net)
+        # create a death object for each genome
         deaths.append(Death(230,350))
         ge.append(genome)
 
+    # initializing game variables
     score = 0
     stage = get_current_stage(score)
     base = Base(FLOOR, stage)
@@ -381,6 +392,7 @@ def run_simulation(genomes, config):
     while run and len(deaths) > 0:
         clock.tick(60) # set fps
 
+        # handle user input events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -391,30 +403,36 @@ def run_simulation(genomes, config):
                 start_menu()
                 break
 
+        # determine index of the obstacle that the neural network should use as input
         obstacle_ind = 0
         if len(deaths) > 0:
-            if len(obstacles) > 1 and deaths[0].x > obstacles[0].x + obstacles[0].OBSTACLE_TOP.get_width():  # determine whether to use the first or second
-                obstacle_ind = 1                                                                 # obstacle on the screen for neural network input
+            # determine whether to use the first or second obstacle on the screen for neural network input
+            if len(obstacles) > 1 and deaths[0].x > obstacles[0].x + obstacles[0].OBSTACLE_TOP.get_width():
+                obstacle_ind = 1
 
+        # for each death, update fitness and move based on the neural network's output
         for x, death in enumerate(deaths):  # give each death a fitness of 0.1 for each frame it stays alive
             ge[x].fitness += 0.1
             death.move()
 
-            # send death location, top obstacle location and bottom obstacle location and determine from network whether to jump or not
+            # send death location, top obstacle location and bottom obstacle location
+            # and determine from network whether to jump or not
             output = nets[deaths.index(death)].activate((death.y, abs(death.y - obstacles[obstacle_ind].height), abs(death.y - obstacles[obstacle_ind].bottom)))
 
+            # If the network's output is greater than 0.5, make the death jump
             if output[0] > 0.5:  # we use a tanh activation function so result will be between -1 and 1. if over 0.5 jump
                 death.jump()
 
-
+        # Update the base and background positions
         base.move()
-        background.move() # Update the scrolling background
+        background.move()
 
+        # Handle obstacle movement and collisions
         rem = []
         add_obstacle = False
         for obstacle in obstacles:
             obstacle.move()
-            # check for collision
+            # check for collisions
             for death in deaths:
                 if obstacle.collide(death):
                     ge[deaths.index(death)].fitness -= 1
@@ -422,46 +440,54 @@ def run_simulation(genomes, config):
                     ge.pop(deaths.index(death))
                     deaths.pop(deaths.index(death))
 
+            # if the obstacle is off the screen, add it to the removal list
             if obstacle.x + obstacle.OBSTACLE_TOP.get_width() < 0:
                 rem.append(obstacle)
 
+            # ff the death has passed the obstacle,
+            # mark it as passed and set add_obstacle flag
             if not obstacle.passed and obstacle.x < death.x:
                 obstacle.passed = True
                 add_obstacle = True
 
         if add_obstacle:
+            # Increment the score and reward genomes for passing the obstacle
             score += 1
-            # can add this line to give more reward for passing through a obstacle (not required)
             for genome in ge:
                 genome.fitness += 5
 
+            # update stage according to score
             new_stage = get_current_stage(score)
             if new_stage != stage:
                 stage = new_stage
                 background = Background(stage)
 
+            # add new obstacle at the end of the screen
             obstacles.append(Obstacle(WIN_WIDTH, stage))
 
+        # remove obstacles that have been marked for removal
         for r in rem:
             obstacles.remove(r)
 
+        # check for deaths that have collided with the ground or ceiling
         for death in deaths:
             if death.y + death.img.get_height() - 10 >= FLOOR or death.y < -50:
+                # remove the neural network, genome, and death object associated with the colliding death
                 nets.pop(deaths.index(death))
                 ge.pop(deaths.index(death))
                 deaths.pop(deaths.index(death))
 
+        # redraw the game window with updated game objects
         draw_window(WIN, deaths, obstacles, base, background, score, gen, obstacle_ind, show_labels=True)
 
-        # break if score gets large enough
-        if len(ge) > 0:  # Only proceed if the ge list is not empty
+        # getting best genome/network
+        if len(ge) > 0:  # only proceed if the ge list is not empty
             best_index = ge.index(max(ge, key=lambda x: x.fitness))
 
-            # break if score gets large enough
+            # save the best network if the score is greater than 50
             if score > 50:
                 pickle.dump(nets[best_index], open("best.pickle", "wb"))
                 break
-
 
 def run_game(config_file):
     """
@@ -549,10 +575,11 @@ def manual_play():
     score = 0
 
     stage = get_current_stage(score)
-    base = Base(FLOOR, stage)
     background = Background(stage)
-    # delay first obstacle: add + int value to WIN_WIDTH to 
+    # delays first obstacle: add + int value to
+    # WIN_WIDTH to move obst off screen
     obstacles = [Obstacle(WIN_WIDTH + 200, stage)]
+    base = Base(FLOOR, stage)
 
     clock = pygame.time.Clock()
     win = WIN
@@ -681,7 +708,7 @@ def show_leaderboard():
 
     name_heading = leaderboard_font.render("Name", 1, (247, 250, 0))
     score_heading = leaderboard_font.render("Score", 1, (247, 250, 0))
-    WIN.blit(name_heading, (25, 50))
+    WIN.blit(name_heading, (35, 50))
     WIN.blit(score_heading, (500, 50))
 
     for index, entry in enumerate(leaderboard[:10]):  # Show top 10 scores
@@ -690,8 +717,8 @@ def show_leaderboard():
         score_text = leaderboard_font.render(str(entry[1]), 1, (247, 250, 0))
 
         y = 100 + index * 60
-        WIN.blit(rank_text, (25, y))
-        WIN.blit(name_text, (75, y))
+        WIN.blit(rank_text, (35, y))
+        WIN.blit(name_text, (85, y))
         WIN.blit(score_text, (500, y))
 
     pygame.display.update()
