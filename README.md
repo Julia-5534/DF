@@ -102,8 +102,8 @@ matplotlib
 
 
 <p align="center">
-  <img src="RM_imgs/RM_imgLB1.png" alt="LB1" width="40%">
-  <img src="RM_imgs/RM_imgLB2.png" alt="LB2" width="40%">
+  <img src="RM_imgs/RM_imgLB1.png" alt="LB1" width="30%">
+  <img src="RM_imgs/RM_imgLB2.png" alt="LB2" width="30%">
 </p>
 
 
