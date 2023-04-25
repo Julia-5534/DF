@@ -99,7 +99,14 @@ matplotlib
 
 - How do we implement a leaderboard?
     - Put Masons steps in here
-** INSERT GIF OF LEADERBOARD **
+
+
+<p align="center">
+  <img src="RM_imgs/RM_imgLB1.png" alt="LB1" width="50%">
+  <img src="RM_imgs/RM_imgLB2.png" alt="LB2" width="50%">
+</p>
+
+
 - How do we delay the obstacles in the beginning so you don't immediately crash?
     - Add a function to the game screen where you have to tap once for the game to start.
 ** INSERT GIFS OF GAME WITH NO TAP & GAME WITH TAP **
