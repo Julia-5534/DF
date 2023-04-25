@@ -114,7 +114,18 @@ matplotlib
     - Use the same image but in three different colors, one for each background.
     - Use pygame.transform.scale() & pygame.Surface
         - Increases the size of the farts while they fade away
-** INSERT GIF OF FART MOVEMENT **
+
+
+<p align="center">
+  <img src="RM_imgs/GFCloud.png" alt="GFCloud" width="25%">
+  <img src="RM_imgs/GFCloud.png" alt="GFCloud" width="15%">
+  <img src="RM_imgs/GFCloud.png" alt="GFCloud" width="10%">
+  <img src="RM_imgs/YFCloud.png" alt="YFCloud" width="25%">
+  <img src="RM_imgs/YFCloud.png" alt="YFCloud" width="15%">
+  <img src="RM_imgs/YFCloud.png" alt="YFCloud" width="10%">
+</p>
+
+
 - Why does the game look like everything's moving weird?
     - The base and lanterns need to move at the same speed. No more motion sickness!
 ** INSERT GIF OF SHITTY VELOCITY **
@@ -129,10 +140,7 @@ matplotlib
 
 
 <p align="center">
-  <img src="RM_imgs/RM_imgFD1.png" alt="RM_GBG" width="35%">
-  <img src="RM_imgs/RM_imgOFDO1.png" alt="RM_RSBG" width="35%">
-  <img src="RM_imgs/RM_imgFD2.png" alt="RM_HBG" width="35%">
-  <img src="RM_imgs/RM_imgOFD2.png" alt="RM_HBG" width="35%">
+  <img src="RM_imgs/RM_imgFART.png" alt="RM_imgFART">
 </p>
 
 
