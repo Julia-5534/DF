@@ -2,22 +2,18 @@
   <img src="RM_imgs/DFLogo.png" alt="Death Farts">
 </p>
 
-An Utter Masterpiece&trade; By
 
-Julia Bullard <github.com/Julia-5534>
-
-Mason Counts <github.com/spindouken>
-
-This Utter Masterpiece&trade; is a loving homage to the late Flappy Bird mobile app game.
-
+<p align="center">
+<br>An Utter Masterpiece&trade; By</br>
+Julia Bullard <github.com/Julia-5534> & Mason Counts <github.com/spindouken>
+</p>
+<p align="justify">
+<br>This Utter Masterpiece&trade; is a loving homage to the late Flappy Bird mobile app game..................</br>
 But what if instead of Flappy Bird, we played as DEATH RIDING A SCYTHE?!
-
-And what if instead of wings flapping, it was in fact Death's flatulence propelling you forward?!
-
-AND WHAT IF Death travelled from a Graveyard, through the River Styx, and into the fiery depths of Hell?!
-
+And what if instead of wings flapping, it was Death's flatulence propelling you forward?!
+WHAT IF Death travelled from a Graveyard, through the River Styx, and into the fiery depths of Hell?!?!
 WONDER NO MORE! Death Farts is here to quell all those curiosities!
-
+</p>
 
 ## :book: Table of Contents :book:
 * [Environment](#environment)
@@ -34,7 +30,7 @@ WONDER NO MORE! Death Farts is here to quell all those curiosities!
 * This project is interpreted/tested on Ubuntu 20.04 LTS using python3
 
 
-## Requirements
+## :white_check_mark: Requirements :white_check_mark:
 * pygame
 * numpy
 * neat-python
@@ -49,8 +45,9 @@ WONDER NO MORE! Death Farts is here to quell all those curiosities!
 
 
 ## :video_game: Controls :video_game:
-* `Tab` `Alt` `LMB`
+* `LMB`
     * Starts Game from Main Menu
+* `Tab` or `Alt`
     * Starts Game from Game Over Screen
 * `Spacebar`
     * Projects Death into the air
@@ -154,14 +151,13 @@ WONDER NO MORE! Death Farts is here to quell all those curiosities!
 
 
 ## :beetle: Bugs :beetle:
-No known bugs at this time.
+- No known bugs at this time.
 
 
 ## :memo: Authors :memo:
-Julia Bullard - [Github](https://github.com/Julia-5534)
-
-Mason Count - [Github](https://github.com/spindouken) 
+- Julia Bullard - [Github](https://github.com/Julia-5534)
+- Mason Counts - [Github](https://github.com/spindouken) 
 
 
 ## :scroll: License :scroll:
-No touchy! (Insert photo of Llama Cuzco. No, don't. Disney would totally sue.)
+- No touchy! (Insert photo of Llama Cuzco. No, don't. Disney would totally sue.)
