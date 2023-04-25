@@ -18,6 +18,11 @@ WONDER NO MORE! Death Farts is here to quell all those curiosities!
 </p>
 
 
+<p align="center">
+  <img src="RM_imgs/RM_banner.png" alt="Banner">
+</p>
+
+
 ## :book: Table of Contents :book:
 * [Environment](#environment)
 * [Requirements](#requirements)
