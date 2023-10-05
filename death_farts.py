@@ -25,7 +25,7 @@ STAT_FONT = pygame.font.Font("Open 24 Display St.ttf", 50)
 DEATH_IMGS = [pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "dfhalf.png"))),
              pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "dfhalf.png"))),
              pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "dfhalf.png")))]
-OBSTACLE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", f"obstacleBottom_stage{stage}.png")))
+OBSTACLE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", f"pipeBottom_stage{stage}.png")))
 OBSTACLE_BOTTOM = OBSTACLE_IMG
 BASE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", f"fground_stage{stage}.png")).convert())
 BG_IMG = pygame.image.load(os.path.join("imgs", f"bg_stage{stage}.png")).convert()
@@ -221,7 +221,7 @@ class Obstacle:
         self.gap = 370
         self.top = 0
         self.bottom = 0
-        self.OBSTACLE_BOTTOM = pygame.image.load(os.path.join("imgs", f"obstacleBottom_stage{stage}.png")).convert_alpha()
+        self.OBSTACLE_BOTTOM = pygame.image.load(os.path.join("imgs", f"pipeBottom_stage{stage}.png")).convert_alpha()
         self.OBSTACLE_TOP = pygame.transform.flip(self.OBSTACLE_BOTTOM, False, True)
         self.passed = False
         self.set_height()
